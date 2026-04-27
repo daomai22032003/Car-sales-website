@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vendor;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class VendorController extends Controller
 {
     /**
@@ -49,7 +49,7 @@ class VendorController extends Controller
         //Khởi tạo Model và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
         $vendor = new Vendor();
         $vendor->name = $request->input('name');
-        $vendor->slug = str_slug($request->input('name')); // slug
+        $vendor->slug = str::slug($request->input('name')); // slug
 
         // email
         $vendor->email = $request->input('email');
@@ -133,7 +133,7 @@ class VendorController extends Controller
         //Lấy đối tượng  và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
         $vendor = Vendor::findorFail($id);
         $vendor->name = $request->input('name');
-        $vendor->slug = str_slug($request->input('name')); // slug
+        $vendor->slug = str::slug($request->input('name')); // slug
 
 
         // email

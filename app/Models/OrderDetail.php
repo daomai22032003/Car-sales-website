@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderDetail extends Model
 {
-    protected $table = "order_detail"; // chi dinh ten CSDL
+    protected $table = "order_details"; // chi dinh ten CSDL
 
     public $timestamps = false;
 

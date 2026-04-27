@@ -10,7 +10,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\CartItem;
 use App\Models\Product;
-use App\Models\Statistical;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -185,88 +185,78 @@ class CartController extends GeneralController
 
     // thêm đơn hàng
     public function postCheckout(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $cartItems = Auth::user()->cartItems()->with('product')->get();
-        if ($cartItems->isEmpty()) {
-            return redirect('/');
-        }
-
-        $request->validate([
-            'fullname' => 'required|max:255',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'address' => 'required',
-        ]);
-
-        // Tính toán tổng tiền từ database
-        $totalPrice = 0;
-        foreach ($cartItems as $item) {
-            $totalPrice += $item->quantity * $item->product->sale;
-        }
-
-        $discount = session('discount_amount', 0);
-        $coupon = session('coupon_code', null);
-
-        // Lưu vào bảng đơn đặt hàng - orders
-        $order = new Order();
-        $order->user_id = Auth::id(); // Gán ID người dùng
-        $order->fullname = $request->input('fullname');
-        $order->phone = $request->input('phone');
-        $order->email = $request->input('email');
-        $order->address = $request->input('address');
-        $order->note = $request->input('note');
-        $order->total = $totalPrice;
-        $order->discount = $discount;
-        $order->coupon = $coupon;
-        $order->order_status_id = 1; // 1 = mới
-        // Tạo mã đơn hàng gửi tới khách hàng
-        $order->code = 'DH-' . date('d') . date('m') . date('Y') . '-' . time();
-        if ($order->save()) {
-            $id_order = $order->id;
-            foreach ($cartItems as $item) {
-                $_detail = new OrderDetail();
-                $_detail->order_id = $id_order;
-                $_detail->name = $item->product->name;
-                $_detail->image = $item->product->image;
-                $_detail->sku = $item->product->sku;
-                $_detail->product_id = $item->product->id;
-                $_detail->qty = $item->quantity;
-                $_detail->price = $item->quantity * $item->product->sale;
-                $_detail->user_id = $item->product->user_id;
-                $_detail->save();
-
-                // Giam số lượng trong kho
-                $product_model = Product::find($item->product->id);
-                if ($product_model) {
-                    $product_model->stock = $product_model->stock - $item->quantity;
-                    $product_model->save();
-                }
-            }
-
-            $statistical = new Statistical();
-            $statistical->total_quantity = $cartItems->sum('quantity');
-            $statistical->total_price = $totalPrice;
-            $statistical->period = Carbon::now();
-            $statistical->id_user = $order->id;
-            $statistical->id_status = 0;
-            $statistical->save();
-
-            // Xóa thông tin giỏ hàng Trong Database
-            Auth::user()->cartItems()->delete();
-            session()->forget(['coupon_code', 'discount_amount', 'cart']);
-
-            // gửi email cho KH
-
-
-            return redirect()->route('shop.cart.checkout')
-                ->with('msg', 'Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn : #' . $order->code);
-        }
-        return redirect()->back()->with('error', 'Có lỗi xảy ra khi tạo đơn hàng.');
+{
+    if (!Auth::check()) {
+        return redirect()->route('login');
     }
+
+    $cartItems = Auth::user()->cartItems()->with('product')->get();
+    if ($cartItems->isEmpty()) {
+        return redirect('/');
+    }
+
+    $request->validate([
+        'fullname' => 'required|max:255',
+        'phone' => 'required',
+        'email' => 'required|email',
+        'address' => 'required',
+    ]);
+
+    // Tính tổng tiền
+    $totalPrice = 0;
+    foreach ($cartItems as $item) {
+        $totalPrice += $item->quantity * $item->product->sale;
+    }
+
+    $discount = session('discount_amount', 0);
+    $coupon = session('coupon_code', null);
+
+    // Tạo đơn hàng
+    $order = new Order();
+    $order->user_id = Auth::id();
+    $order->fullname = $request->fullname;
+    $order->phone = $request->phone;
+    $order->email = $request->email;
+    $order->address = $request->address;
+    $order->note = $request->note;
+    $order->total = $totalPrice;
+    $order->discount = $discount;
+    $order->coupon = $coupon;
+    $order->order_status_id = 1;
+    $order->code = 'DH-' . date('dmY') . '-' . time();
+
+    if ($order->save()) {
+
+        foreach ($cartItems as $item) {
+            $detail = new OrderDetail();
+            $detail->order_id = $order->id;
+            $detail->product_id = $item->product->id;
+            $detail->name = $item->product->name;
+            $detail->image = $item->product->image;
+            $detail->sku = $item->product->sku;
+            $detail->qty = $item->quantity;
+            $detail->price = $item->product->sale; // ✅ giá 1 sp
+            $detail->user_id = $item->product->user_id;
+            $detail->save();
+
+            // Trừ kho
+            $product = Product::find($item->product->id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+        }
+
+        // Xóa giỏ hàng
+        Auth::user()->cartItems()->delete();
+        session()->forget(['coupon_code', 'discount_amount', 'cart']);
+
+        return redirect()->route('shop.cart.checkout')
+            ->with('msg', 'Đặt hàng thành công! Mã đơn: #' . $order->code);
+    }
+
+    return back()->with('error', 'Lỗi tạo đơn hàng');
+}
 
     public function vnpay(Request $request)
     {
@@ -374,80 +364,71 @@ class CartController extends GeneralController
     }
 
     public function vnpayDone(Request $request)
-    {
-        if (!Auth::check()) {
-            return redirect('/');
-        }
-
-        $cartItems = Auth::user()->cartItems()->with('product')->get();
-        if ($cartItems->isEmpty()) {
-            return redirect('/');
-        }
-
-        $totalPrice = 0;
-        foreach ($cartItems as $item) {
-            $totalPrice += $item->quantity * $item->product->sale;
-        }
-
-        $_data = session('data_checkout');
-        $_data_checkout = (object) $_data;
-        $discount = session('discount_amount', 0);
-        $coupon = session('coupon_code', null);
-
-        // Lưu vào bảng đơn đặt hàng - orders
-        $order = new Order();
-        $order->user_id = Auth::id(); // Gán ID người dùng
-        $order->fullname = $_data_checkout->fullname;
-        $order->phone = $_data_checkout->phone;
-        $order->email = $_data_checkout->email;
-        $order->address = $_data_checkout->address;
-        $order->note = $_data_checkout->note;
-        $order->payment_vnpay = $totalPrice / 10;
-        $order->total = $totalPrice;
-        $order->discount = $discount;
-        $order->coupon = $coupon;
-        $order->order_status_id = 1; // 1 = mới
-        $order->payment_vnpay_status = 1; // 1 = chờ xác nhận
-        // Tạo mã đơn hàng gửi tới khách hàng
-        $order->code = 'DH-' . date('d') . date('m') . date('Y') . '-' . time();
-        if ($order->save()) {
-            $id_order = $order->id;
-            foreach ($cartItems as $item) {
-                $_detail = new OrderDetail();
-                $_detail->order_id = $id_order;
-                $_detail->name = $item->product->name;
-                $_detail->image = $item->product->image;
-                $_detail->sku = $item->product->sku;
-                $_detail->product_id = $item->product->id;
-                $_detail->qty = $item->quantity;
-                $_detail->price = $item->quantity * $item->product->sale;
-                $_detail->user_id = $item->product->user_id;
-                $_detail->save();
-
-                // Giam số lượng trong kho
-                $product_model = Product::find($item->product->id);
-                if ($product_model) {
-                    $product_model->stock = $product_model->stock - $item->quantity;
-                    $product_model->save();
-                }
-            }
-
-            $statistical = new Statistical();
-            $statistical->total_quantity = $cartItems->sum('quantity');
-            $statistical->total_price = $totalPrice;
-            $statistical->period = Carbon::now();
-            $statistical->id_user = $order->id;
-            $statistical->id_status = 0;
-            $statistical->save();
-
-            // Xóa thông tin giỏ hàng Trong Database & Session
-            Auth::user()->cartItems()->delete();
-            $request->session()->forget(['cart', 'data_checkout', 'coupon_code', 'discount_amount']);
-
-            // gửi email cho KH
-
-
-            return redirect()->route('shop.cart.deposit_success', ['order_code' => $order->code]);
-        }
+{
+    if (!Auth::check()) {
+        return redirect('/');
     }
+
+    $cartItems = Auth::user()->cartItems()->with('product')->get();
+    if ($cartItems->isEmpty()) {
+        return redirect('/');
+    }
+
+    $totalPrice = 0;
+    foreach ($cartItems as $item) {
+        $totalPrice += $item->quantity * $item->product->sale;
+    }
+
+    $_data = session('data_checkout');
+    $_data_checkout = (object) $_data;
+
+    $discount = session('discount_amount', 0);
+    $coupon = session('coupon_code', null);
+
+    $order = new Order();
+    $order->user_id = Auth::id();
+    $order->fullname = $_data_checkout->fullname;
+    $order->phone = $_data_checkout->phone;
+    $order->email = $_data_checkout->email;
+    $order->address = $_data_checkout->address;
+    $order->note = $_data_checkout->note;
+    $order->payment_vnpay = $totalPrice / 10;
+    $order->total = $totalPrice;
+    $order->discount = $discount;
+    $order->coupon = $coupon;
+    $order->order_status_id = 1;
+    $order->payment_vnpay_status = 1;
+    $order->code = 'DH-' . date('dmY') . '-' . time();
+
+    if ($order->save()) {
+
+        foreach ($cartItems as $item) {
+            $detail = new OrderDetail();
+            $detail->order_id = $order->id;
+            $detail->product_id = $item->product->id;
+            $detail->name = $item->product->name;
+            $detail->image = $item->product->image;
+            $detail->sku = $item->product->sku;
+            $detail->qty = $item->quantity;
+            $detail->price = $item->product->sale;
+            $detail->user_id = $item->product->user_id;
+            $detail->save();
+
+            // Trừ kho
+            $product = Product::find($item->product->id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+        }
+
+        // Xóa giỏ hàng
+        Auth::user()->cartItems()->delete();
+        $request->session()->forget(['cart', 'data_checkout', 'coupon_code', 'discount_amount']);
+
+        return redirect()->route('shop.cart.deposit_success', [
+            'order_code' => $order->code
+        ]);
+    }
+}
 }

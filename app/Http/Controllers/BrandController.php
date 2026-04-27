@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 class BrandController extends Controller
 {
     /**
@@ -50,7 +50,7 @@ class BrandController extends Controller
         //Khởi tạo Model và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
         $brand = new Brand();
         $brand->name = $request->input('name');
-        $brand->slug = str_slug($request->input('name')); // slug
+        $brand->slug = Str::slug($request->input('name')); // slug
 
         if ($request->hasFile('image')) { // dòng này Kiểm tra xem có image có được chọn
             // get file
@@ -130,7 +130,7 @@ class BrandController extends Controller
         //Lấy đối tượng  và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
         $brand = Brand::findorFail($id);
         $brand->name = $request->input('name');
-        $brand->slug = str_slug($request->input('name')); // slug
+        $brand->slug = Str::slug($request->input('name')); // slug
 
         if ($request->hasFile('new_image')) { // dòng này Kiểm tra xem có image có được chọn
             // xóa file cũ

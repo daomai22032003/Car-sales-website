@@ -64,59 +64,90 @@ class AdminController extends Controller
     }
     public function showChar()
     {
-        $day60 = DB::table('statistical')
-            ->select('period', DB::raw('SUM(total_quantity) as total_quantity'), DB::raw('SUM(total_price) as total_price'))
-            ->where('id_status', 3)
-            ->groupBy('period')
-            ->orderBy('period', 'asc')
-            ->get();
+       
+   $data = DB::table('order_details as od')
+        ->join('orders as o', 'o.id', '=', 'od.order_id')
+        ->select(
+            DB::raw("DATE(o.created_at) as period"),
+            DB::raw("SUM(od.qty) as quantity"),
+            DB::raw("SUM(od.price) as price") // ✅ CHUẨN
+        )
+        ->where('o.order_status_id', 3)
+        ->groupBy(DB::raw("DATE(o.created_at)"))
+        ->orderBy('period', 'ASC')
+        ->get();
 
-        $chart_array = [];
-        foreach ($day60 as $item) {
-            $chart_array[] = array(
+    return response()->json([
+        'code' => 200,
+        'main' => $data->map(function ($item) {
+            return [
                 'period' => $item->period,
-                'quantity' => $item->total_quantity,
-                'price' => $item->total_price
-            );
-        }
-        return response()->json([
-            'code' => 200,
-            'main' => $chart_array
-        ], 200);
+                'quantity' => (int)$item->quantity,
+                'price' => (int)$item->price,
+            ];
+        })
+    ]);
     }
 
     public function filterChar(Request $request)
     {
-        $res = DB::table('statistical')
-            ->select('period', DB::raw('SUM(total_quantity) as total_quantity'), DB::raw('SUM(total_price) as total_price'))
-            ->whereBetween('period', [$request->form, $request->to])
-            ->where('id_status', 3)
-            ->groupBy('period')
-            ->orderBy('period', 'asc')
-            ->get();
+        
+    $data = DB::table('order_details as od')
+        ->join('orders as o', 'o.id', '=', 'od.order_id')
+        ->select(
+            DB::raw("DATE(o.created_at) as period"),
+            DB::raw("SUM(od.qty) as quantity"),
+            DB::raw("SUM(od.price) as price") // ✅ GIỐNG HÀM TRÊN
+        )
+        ->where('o.order_status_id', 3)
+        ->whereBetween(DB::raw("DATE(o.created_at)"), [
+            $request->from,
+            $request->to
+        ])
+        ->groupBy(DB::raw("DATE(o.created_at)"))
+        ->orderBy('period', 'ASC')
+        ->get();
 
-        $chart_array = [];
-        foreach ($res as $item) {
-            $chart_array[] = array(
+    return response()->json([
+        'code' => 200,
+        'main' => $data->map(function ($item) {
+            return [
                 'period' => $item->period,
-                'quantity' => $item->total_quantity,
-                'price' => $item->total_price
-            );
-        }
-
-        return response()->json([
-            'code' => 200,
-            'main' => $chart_array
-        ], 200);
+                'quantity' => (int)$item->quantity,
+                'price' => (int)$item->price,
+            ];
+        })
+    ]);
     }
 
-    public function statistical()
+    public function statistical(Request $request)
     {
-        $totalRevenue = Order::where('order_status_id', 3)->sum('total');
-        $totalOrders = Order::count();
-        $successfulOrders = Order::where('order_status_id', 3)->count();
-        $totalProductsSold = DB::table('statistical')->where('id_status', 3)->sum('total_quantity');
+    $totalRevenue = Order::where('order_status_id', 3)->sum('total');
+    $totalOrders = Order::count();
+    $successfulOrders = Order::where('order_status_id', 3)->count();
 
-        return view('admin.statistical.index', compact('totalRevenue', 'totalOrders', 'successfulOrders', 'totalProductsSold'));
+    $totalProductsSold = DB::table('order_details')
+        ->join('orders', 'orders.id', '=', 'order_details.order_id')
+        ->where('orders.order_status_id', 3)
+        ->sum('order_details.qty');
+
+    // 🔥 dữ liệu biểu đồ theo ngày
+    $chartData = DB::table('orders')
+        ->select(
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('SUM(total) as revenue')
+        )
+        ->where('order_status_id', 3)
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+    return view('admin.statistical.index', compact(
+        'totalRevenue',
+        'totalOrders',
+        'successfulOrders',
+        'totalProductsSold',
+        'chartData' // 🔥 QUAN TRỌNG
+    ));
     }
 }
