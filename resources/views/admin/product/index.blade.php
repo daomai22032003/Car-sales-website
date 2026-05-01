@@ -60,8 +60,7 @@
                                     <th style="max-with:200px">Tên SP</th>
                                     <th>Hình ảnh</th>
                                     <th>Số lượng</th>
-                                    <th>Giá KM</th>
-                                    {{-- <th>Giá Gốc</th>--}}
+                                    <th>Giá</th>
                                     <th>Sản phẩm Hot</th>
                                     <th>Trạng thái</th>
                                     <th>Người tạo</th>
@@ -79,7 +78,21 @@
                                         @endif
                                     </td>
                                     <td>{{ $item->stock }}</td>
-                                    <td>{{ $item->sale }}</td>
+                                    <td>
+                                        @if($item->sale > 0)
+                                            <span style="color:red; font-weight:bold;">
+                                                {{ number_format($item->sale) }} đ
+                                            </span>
+                                            <br>
+                                            <span style="text-decoration: line-through; color:#999;">
+                                                {{ number_format($item->price) }} đ
+                                            </span>
+                                        @else
+                                            <span style="font-weight:bold;">
+                                                {{ number_format($item->price) }} đ
+                                            </span>
+                                        @endif
+                                    </td>
                                     {{-- <td>{{ $item->price }}</td>--}}
                                     <td>{{ ($item->is_hot == 1) ? 'Có' : 'Không' }}</td>
                                     <td>{{ ($item->is_active == 1) ? 'Hiển thị' : 'Ẩn' }}</td>

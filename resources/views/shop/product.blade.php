@@ -42,7 +42,18 @@
                                     </p>
                                 </div>
                                 <div class="single-product-price">
-                                    <h2>{{ number_format($product->sale,0,",",".") }} <span style="text-transform: lowercase">đ</span></h2>
+                                <h2>@if($product->sale > 0)
+                                    <h2 style="color:red;">
+                                        {{ number_format($product->sale,0,",",".") }} 
+                                    </h2>
+                                    <span style="text-decoration: line-through; color: #999;">
+                                        {{ number_format($product->price,0,",",".") }} 
+                                    </span>
+                                @else
+                                    <h2>
+                                        {{ number_format($product->price,0,",",".") }} 
+                                    </h2>
+                                @endif <span style="text-transform: lowercase"></span></h2>
                                 </div>
                                 <div class="single-product-add-cart">
                                     <a class="add-cart-text" title="Add to cart" href="{{ route('shop.cart.add-to-cart', ['id' => $product->id]) }}">Mua Hàng</a>
@@ -60,6 +71,7 @@
                                     <li class="active"><a href="#moreinfo" data-toggle="tab">Tóm Tắt</a></li>
                                     <li><a href="#datasheet" data-toggle="tab">Chi tiết</a></li>
                                     <li><a href="#review" data-toggle="tab">Đánh giá</a></li>
+                                    <li><a href="" data-toggle="tab">So sánh</a></li>
                                 </ul>
                                 <!-- Tab panes -->
                                 <div class="tab-content">
@@ -120,16 +132,34 @@
                                     <!-- RELATED-CAROUSEL START -->
                                     <div class="related-product">
                                         <!-- SINGLE-PRODUCT-ITEM START -->
-                                        @foreach($viewedProducts as $item)
+                                       @foreach($viewedProducts as $item)
                                             <div class="item">
                                                 <div class="single-product-item">
                                                     <div class="product-image">
-                                                        <a href="#"><img src="{{ asset($item->image) }}" alt="{{ $item->name }}" /></a>
+                                                        <a href="{{ route('shop.product', ['slug' => $item->slug, 'id' => $item->id]) }}">
+                                                            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" />
+                                                        </a>
                                                     </div>
+
                                                     <div class="product-info">
-                                                        <a href="#">{{ $product->name }}</a>
+                                                        <a href="{{ route('shop.product', ['slug' => $item->slug, 'id' => $item->id]) }}">
+                                                            {{ $item->name }}
+                                                        </a>
+
                                                         <div class="price-box">
-                                                            <span class="price">{{ number_format($product->sale,0,",",".") }} đ</span>
+                                                            @if($item->sale > 0)
+                                                                <div style="color: red; font-weight: bold;">
+                                                                    {{ number_format($item->sale,0,",",".") }} đ
+                                                                </div>
+
+                                                                <div style="color: #000; text-decoration: line-through; font-size: 15px;">
+                                                                    {{ number_format($item->price,0,",",".") }} đ
+                                                                </div>
+                                                            @else
+                                                                <div style="color: #000; font-weight: bold;">
+                                                                    {{ number_format($item->price,0,",",".") }} đ
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>

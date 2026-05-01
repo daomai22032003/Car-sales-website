@@ -8,12 +8,18 @@
     if (Auth::check()) {
         $cartItems = Auth::user()->cartItems()->with('product')->get();
         foreach ($cartItems as $item) {
+
+             $price = ($item->product->sale > 0)
+                ? $item->product->sale
+                : $item->product->price;
+
             $products[] = [
                 'qty' => $item->quantity,
-                'price' => $item->quantity * $item->product->sale,
+                'price' => $price,
                 'item' => $item->product
             ];
-            $totalPrice += $item->quantity * $item->product->sale;
+
+$totalPrice += $item->quantity * $price;
             $totalQty += $item->quantity;
         }
         // Handle coupon from session if still using session for coupons
@@ -84,12 +90,25 @@
                                 <small>SKU : {{ $product['item']->sku }}</small>
                             </td>
                             <td class="cart-unit">
+                                     @php
+                                            $price = ($product['item']->sale > 0)
+                                                ? $product['item']->sale
+                                                : $product['item']->price;
+                                        @endphp
                                 <ul class="price text-right">
                                     <li class="price-percent-reduction small">
-                                        &nbsp; {{ number_format($product['item']->sale, 0, ",", ".") }} đ
+                                        
+
+                                        {{ number_format($price, 0, ",", ".") }} đ
                                     </li>
-                                    @if($product['item']->sale < $product['item']->price)
-                                        <li class="old-price">{{ number_format($product['item']->price, 0, ",", ".") }} đ</li>
+                                   @if($product['item']->sale > 0 && $product['item']->sale < $product['item']->price)
+                                        <li class="old-price">@php
+                                            $price = ($product['item']->sale > 0)
+                                                ? $product['item']->sale
+                                                : $product['item']->price;
+                                        @endphp
+
+                                        {{ number_format($price, 0, ",", ".") }}  đ</li>
                                     @endif
                                 </ul>
                             </td>
@@ -101,7 +120,13 @@
                             </td>
                             <td class="cart-total">
                                 <span class="price">
-                                    {{ number_format($product['qty'] * $product['item']->sale, 0, ",", ".") }}đ</span>
+                                    @php
+                                    $price = ($product['item']->sale > 0)
+                                        ? $product['item']->sale
+                                        : $product['item']->price;
+                                @endphp
+
+                                {{ number_format($product['qty'] * $price, 0, ",", ".") }}đ</span>
                             </td>
                             <td class="cart-delete text-center">
                                 <a data-id="{{ $product['item']->id }}" href="javascript:void(0)"

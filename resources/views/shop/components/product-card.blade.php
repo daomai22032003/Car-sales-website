@@ -9,8 +9,22 @@
     <div class="info" style="padding: 20px;">
         <a href="{{ route('shop.product', ['slug' => $product->slug, 'id' => $product->id]) }}" class="name"
             style="text-decoration: none; display: block; font-weight: 700; color: #1a2a5a; font-size: 15px; margin-bottom: 8px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2;">{{ $product->name }}</a>
-        <div class="price" style="color: #b02a2a; font-weight: 800; font-size: 18px; margin-bottom: 15px;">
+        <div class="price" style="color: #180202; font-weight: 800; font-size: 18px; margin-bottom: 15px;">
+            <div class="price-box">
+    @if($product->sale > 0)
+        <div style="color: red; font-weight: bold; font-size: 16px;">
             {{ number_format($product->sale, 0, ",", ".") }} đ
+        </div>
+
+        <div style="color: #000; font-size: 14px; text-decoration: line-through;">
+            {{ number_format($product->price, 0, ",", ".") }} đ
+        </div>
+    @else
+        <div style="color: #000; font-weight: bold; font-size: 18px;">
+            {{ number_format($product->price, 0, ",", ".") }} đ
+        </div>
+    @endif
+</div>
         </div>
         <div class="specs"
             style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; color: #666; border-top: 1px solid #f0f0f0; padding-top: 15px;">

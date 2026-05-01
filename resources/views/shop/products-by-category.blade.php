@@ -21,19 +21,34 @@
                     <div class="product-left-sidebar">
 
                         <div class="product-single-sidebar">
-                            <span class="sidebar-title" style="border-bottom: 0px; ">Thương hiệu</span>
-                            <ul class="thuong-hieu">
+                            <span class="sidebar-title" style="border-bottom: 0px; ">Loại xe</span>
+                          <ul class="thuong-hieu">
                                 <li>
                                     <label class="cheker">
-                                        <input class="filter_category" data-text="tat-ca" type="checkbox" name="category_id" value="" checked />
+                                        <input 
+                                            class="filter_category" 
+                                            data-text="tat-ca" 
+                                            type="radio" 
+                                            name="category" 
+                                            value="tat-ca"
+                                            {{ empty($arr_filter_brands) ? 'checked' : '' }}
+                                        />
                                         <span></span>
                                     </label>
                                     <a href="javascript:void(0)">Tất cả</a>
                                 </li>
+
                                 @foreach($branchs as $child)
                                     <li>
                                         <label class="cheker">
-                                            <input class="filter_category" data-text="{{ $child->slug }}" type="checkbox" name="category_id" value="{{ $child->id }}"/>
+                                            <input 
+                                                class="filter_category" 
+                                                data-text="{{ $child->slug }}" 
+                                                type="radio" 
+                                                name="category" 
+                                                value="{{ $child->id }}"
+                                                {{ ($arr_filter_brands == $child->slug) ? 'checked' : '' }}
+                                            />
                                             <span></span>
                                         </label>
                                         <a href="javascript:void(0)">{{ $child->name }}</a>
@@ -46,45 +61,45 @@
                         <div class="product-single-sidebar">
                             <span class="sidebar-title" style="border-bottom: 0px">Mức giá</span>
                             <ul>
-                                <li>
-                                    <label class="cheker">
-                                        <input {{ ($filter_price == '' ? 'checked' : '') }} class="filter-price" value="tat-ca" type="radio" name="availability"/>
-                                        <span></span>
-                                    </label>
-                                    <a href="javascript:void(0)">Tất cả</a>
-                                </li>
-                                <li>
-                                    <label class="cheker">
-                                        <input {{ ($filter_price == '1-200000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="1-500000000"/>
-                                        <span></span>
-                                    </label>
-                                    <a href="#">Dưới 500 triệu
-                                    </a>
-                                </li>
-                                <li>
-                                    <label class="cheker">
-                                        <input {{ ($filter_price == '200000000-400000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="300000000-400000000"/>
-                                        <span></span>
-                                    </label>
-                                    <a href="#">Từ 300 - 400 triệu
-                                    </a>
-                                </li>
-                                <li>
-                                    <label class="cheker">
-                                        <input {{ ($filter_price == '400000000-700000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="400000000-700000000"/>
-                                        <span></span>
-                                    </label>
-                                    <a href="#">Từ 400 - 700 triệu
-                                    </a>
-                                </li>
-                                <li>
-                                    <label class="cheker">
-                                        <input {{ ($filter_price == '700000000-730000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="7000000-13000000"/>
-                                        <span></span>
-                                    </label>
-                                    <a href="#">trên 700 triệu
-                                    </a>
-                                </li>
+                               <li>
+    <label class="cheker">
+        <input {{ ($filter_price == '' ? 'checked' : '') }} class="filter-price" value="tat-ca" type="radio" name="price"/>
+        <span></span>
+    </label>
+    <a href="javascript:void(0)">Tất cả</a>
+</li>
+
+<li>
+    <label class="cheker">
+        <input {{ ($filter_price == '0-500000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="0-500000000"/>
+        <span></span>
+    </label>
+    <a href="#">Dưới 500 triệu</a>
+</li>
+
+<li>
+    <label class="cheker">
+        <input {{ ($filter_price == '300000000-400000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="300000000-400000000"/>
+        <span></span>
+    </label>
+    <a href="#">300 - 400 triệu</a>
+</li>
+
+<li>
+    <label class="cheker">
+        <input {{ ($filter_price == '400000000-700000000' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="400000000-700000000"/>
+        <span></span>
+    </label>
+    <a href="#">400 - 700 triệu</a>
+</li>
+
+<li>
+    <label class="cheker">
+        <input {{ ($filter_price == '700000000-' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="700000000-"/>
+        <span></span>
+    </label>
+    <a href="#">Trên 700 triệu</a>
+</li>
                                 <!-- <li>
                                     <label class="cheker">
                                         <input {{ ($filter_price == '13000000-' ? 'checked' : '') }} class="filter-price" type="radio" name="price" value="13000000-"/>
@@ -136,7 +151,20 @@
                                             <div class="product-info">
                                                 <a href="{{ route('shop.product', ['slug' => $product->slug , 'id' => $product->id]) }}" title="{{ $product->name }}">{{ $product->name }}</a>
                                                 <div class="price-box">
-                                                    <span class="price">{{ number_format($product->sale,0,",",".") }} đ<span class="p-price">{{ number_format($product->price,0,",",".") }} đ</span></span>
+                                            <div class="price-box">
+                                                @if($product->sale > 0)
+                                                    <span class="price" style="color:red; font-weight:bold;">
+                                                        {{ number_format($product->sale,0,",",".") }} đ
+                                                    </span>
+                                                    <span class="p-price" style="text-decoration: line-through; color:#777;">
+                                                        {{ number_format($product->price,0,",",".") }} đ
+                                                    </span>
+                                                @else
+                                                    <span class="price" style="font-weight:bold;">
+                                                        {{ number_format($product->price,0,",",".") }} đ
+                                                    </span>
+                                                @endif
+                                            </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,88 +190,97 @@
 @section('my_javascript')
     <script type="text/javascript">
 
-        var pathname = window.location.pathname; // danh-muc/dien-thoai , /danh-muc/tablet
-        var urlParams = new URLSearchParams(window.location.search); // khoi tao
+    var pathname = window.location.pathname;
+    var urlParams = new URLSearchParams(window.location.search || '');
 
-        $(document).on('click', '.filter_category', function () {
-            var slug = $(this).data('text');
+    // ================= BRAND =================
+    $(document).on('click', '.filter_category', function () {
 
-            // check nếu là tất cả
-            if (slug === 'tat-ca') {
-                urlParams.delete('thuong-hieu');
-            } else {
-                var inputCategories = $('.filter_category');
-                var str_slug = '';
+        var isAll = $(this).data('text') === 'tat-ca';
 
-                // vòng lặp từ 1, để loại bỏ tất-cả
-                for(var i = 1; inputCategories[i]; ++i) {
-                    if (inputCategories[i].checked) {
-                        str_slug += inputCategories[i].getAttribute('data-text') + ',';
-                    }
-                } // xiaomi,dell,
+        if (isAll) {
+            // chọn tất cả → bỏ các brand khác
+            $('.filter_category').prop('checked', false);
+            $(this).prop('checked', true);
+            urlParams.delete('thuong-hieu');
+        } else {
+            // chọn brand → bỏ "tất cả"
+            $('.filter_category[data-text="tat-ca"]').prop('checked', false);
 
-                // Xóa ký tự "," cuối cùng sau khi nối chuỗi ở trên
-                if(str_slug && str_slug.slice(-1) === ',') {
-                    var indexPath = str_slug.lastIndexOf(',');
-                    str_slug = str_slug.substring(0, indexPath);
+            var str_slug = '';
+
+            $('.filter_category:checked').each(function() {
+                var slug = $(this).data('text');
+                if (slug !== 'tat-ca') {
+                    str_slug += slug + ',';
                 }
+            });
 
+            if (str_slug !== '') {
+                str_slug = str_slug.slice(0, -1);
                 urlParams.set('thuong-hieu', str_slug);
-            }
-
-            // chuyển hướng trang
-            window.location.href = pathname + "?" + decodeURIComponent(urlParams.toString());
-        });
-
-        $(document).on('click', '.filter-price', function () {
-            var price = $(this).val(); // 20000000 - 40000000
-
-            if (price === 'tat-ca') {
-                urlParams.delete('gia'); // xóa param trên url
             } else {
-                urlParams.set('gia', price); // &gia=20000000-40000000
+                urlParams.delete('thuong-hieu');
             }
+        }
 
-            // chuyển hướng trang
-            window.location.href = pathname + "?"+decodeURIComponent(urlParams.toString());
-        });
+        window.location.href = pathname + "?" + urlParams.toString();
+    });
 
-        $(document).on('change', '.filter_sort', function () {
-            var sort = $(this).val();
+    // ================= PRICE =================
+    $(document).on('click', '.filter-price', function () {
 
-            if (sort === 'tat-ca') {
-                urlParams.delete('sap-sep');
-            } else {
-                urlParams.set('sap-sep', sort);
-            }
+        var price = $(this).val();
 
-            // chuyển hướng trang
-            window.location.href = pathname + "?"+decodeURIComponent(urlParams.toString());
-        });
+        if (price === 'tat-ca') {
+            urlParams.delete('gia');
+        } else {
+            urlParams.set('gia', price);
+        }
 
-        $( document ).ready(function() {
+        window.location.href = pathname + "?" + urlParams.toString();
+    });
 
-            // SET Checked cho thuong hieu
-            var arr_filter_brands = {{ $arr_filter_brands }};
+    // ================= SORT =================
+    $(document).on('change', '.filter_sort', function () {
 
-            if (arr_filter_brands && arr_filter_brands.length) {
-                var inputCategories = $('.filter_category');
+        var sort = $(this).val();
 
-                for(var i=0; inputCategories[i]; ++i) {
-                    // remove checked
-                    inputCategories[i].removeAttribute('checked');
+        if (sort === 'tat-ca') {
+            urlParams.delete('sap-sep');
+        } else {
+            urlParams.set('sap-sep', sort);
+        }
 
-                    var valueInput = inputCategories[i].getAttribute('value');
-                    valueInput = parseInt(valueInput);
-                    if(arr_filter_brands.indexOf(valueInput) >= 0) {
-                        inputCategories[i].setAttribute('checked', 'checked');
-                    }
+        window.location.href = pathname + "?" + urlParams.toString();
+    });
+
+    // ================= SET CHECKED =================
+    $(document).ready(function() {
+
+        var arr_filter_brands = {!! $arr_filter_brands !!};
+
+        if (arr_filter_brands && arr_filter_brands.length) {
+
+            $('.filter_category').each(function() {
+
+                var value = parseInt($(this).val());
+
+                $(this).prop('checked', false);
+
+                if (arr_filter_brands.includes(value)) {
+                    $(this).prop('checked', true);
                 }
-            }
+            });
 
-        });
+        } else {
+            // nếu không có filter → check "tất cả"
+            $('.filter_category[data-text="tat-ca"]').prop('checked', true);
+        }
 
-    </script>
+    });
+
+</script>
 @endsection
 
 

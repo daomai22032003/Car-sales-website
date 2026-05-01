@@ -29,9 +29,10 @@ class RegisterController extends GeneralController
 
         $user = $this->create($request->all());
 
-        Auth::login($user);
+      
 
-        return redirect('/');
+        return redirect()->route('login')
+    ->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
     }
 
     protected function validator(array $data)

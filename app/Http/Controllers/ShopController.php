@@ -158,20 +158,23 @@ class ShopController extends GeneralController
 
             // Lọc theo giá
             if ($filter_price) {
-                $arr_price = explode('-', $filter_price); // chuyển thành mảng [2000000, 4000000]
-                if ($arr_price) {
-                    $min_price = (int) $arr_price[0];
-                    $max_price = (int) $arr_price[1];
+    $arr_price = explode('-', $filter_price);
 
-                    if ($min_price > 0) {
-                        $query->where('sale', '>=', $min_price);
-                    }
+    $min_price = (int) ($arr_price[0] ?? 0);
+    $max_price = (int) ($arr_price[1] ?? 0);
 
-                    if ($max_price > 0) {
-                        $query->where('sale', '<=', $max_price);
-                    }
-                }
-            }
+    $query->where(function ($q) use ($min_price, $max_price) {
+
+        if ($max_price > 0) {
+            // khoảng giá
+            $q->whereBetween(DB::raw('(CASE WHEN sale > 0 THEN sale ELSE price END)'), [$min_price, $max_price]);
+        } else {
+            // trường hợp "trên xxx"
+            $q->where(DB::raw('(CASE WHEN sale > 0 THEN sale ELSE price END)'), '>=', $min_price);
+        }
+
+    });
+}
 
             // Sắp sếp
             if ($filter_sort) {
@@ -181,9 +184,10 @@ class ShopController extends GeneralController
                     // tinh don dat hang
 
                 } elseif ($filter_sort == 'gia-thap-den-cao') {
-                    $query->orderBy('sale', 'ASC');
-                } elseif ($filter_sort == 'gia-cao-den-thap') {
-                    $query->orderBy('sale', 'DESC');
+                    $query->orderByRaw('(CASE WHEN sale > 0 THEN sale ELSE price END) ASC');
+                }
+                elseif ($filter_sort == 'gia-cao-den-thap') {
+                    $query->orderByRaw('(CASE WHEN sale > 0 THEN sale ELSE price END) DESC');
                 }
 
             } else {

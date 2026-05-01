@@ -13,7 +13,13 @@
                             </h2>
                             <p style="color: #666;">Mừng bạn quay trở lại với DailyXe</p>
                         </div>
+                            @if(session('success'))
+                                <div style="background: #e6f4ea; color: #2e7d32; padding: 12px; border-radius: 10px; margin-bottom: 20px;">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
 
+                            <form method="POST" action="{{ route('login') }}">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
 

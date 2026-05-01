@@ -31,9 +31,12 @@ class CartController extends GeneralController
         if (Auth::check()) {
             $cartItems = Auth::user()->cartItems()->with('product')->get();
             foreach ($cartItems as $item) {
-                $products[] = [
+                $price = ($item->product->sale > 0)
+                    ? $item->product->sale
+                    : $item->product->price;
+            $products[] = [
                     'qty' => $item->quantity,
-                    'price' => $item->quantity * $item->product->sale,
+                    'price' => $price,
                     'item' => $item->product
                 ];
             }
@@ -69,7 +72,7 @@ class CartController extends GeneralController
                 'user_id' => Auth::id(),
                 'product_id' => $id,
                 'quantity' => 1,
-                'price' => $product->sale
+                'price' => ($product->sale > 0) ? $product->sale : $product->price
             ]);
         }
 
@@ -205,7 +208,10 @@ class CartController extends GeneralController
     // Tính tổng tiền
     $totalPrice = 0;
     foreach ($cartItems as $item) {
-        $totalPrice += $item->quantity * $item->product->sale;
+        $price = ($item->product->sale > 0)
+            ? $item->product->sale
+            : $item->product->price;
+        $totalPrice += $item->quantity * $price;
     }
 
     $discount = session('discount_amount', 0);
@@ -235,7 +241,9 @@ class CartController extends GeneralController
             $detail->image = $item->product->image;
             $detail->sku = $item->product->sku;
             $detail->qty = $item->quantity;
-            $detail->price = $item->product->sale; // ✅ giá 1 sp
+           $detail->price = ($item->product->sale > 0)
+            ? $item->product->sale
+            : $item->product->price; // ✅ giá 1 sp
             $detail->user_id = $item->product->user_id;
             $detail->save();
 
@@ -284,7 +292,11 @@ class CartController extends GeneralController
 
         $totalPrice = 0;
         foreach ($cartItems as $item) {
-            $totalPrice += $item->quantity * $item->product->sale;
+            $price = ($item->product->sale > 0)
+    ? $item->product->sale
+    : $item->product->price;
+
+$totalPrice += $item->quantity * $price;
         }
 
         $data = $request->all();
@@ -376,7 +388,11 @@ class CartController extends GeneralController
 
     $totalPrice = 0;
     foreach ($cartItems as $item) {
-        $totalPrice += $item->quantity * $item->product->sale;
+                $price = ($item->product->sale > 0)
+            ? $item->product->sale
+            : $item->product->price;
+
+        $totalPrice += $item->quantity * $price;
     }
 
     $_data = session('data_checkout');
@@ -392,7 +408,7 @@ class CartController extends GeneralController
     $order->email = $_data_checkout->email;
     $order->address = $_data_checkout->address;
     $order->note = $_data_checkout->note;
-    $order->payment_vnpay = $totalPrice / 10;
+    $order->payment_vnpay = floor($totalPrice / 10);
     $order->total = $totalPrice;
     $order->discount = $discount;
     $order->coupon = $coupon;
@@ -410,7 +426,9 @@ class CartController extends GeneralController
             $detail->image = $item->product->image;
             $detail->sku = $item->product->sku;
             $detail->qty = $item->quantity;
-            $detail->price = $item->product->sale;
+           $detail->price = ($item->product->sale > 0)
+                ? $item->product->sale
+                : $item->product->price;
             $detail->user_id = $item->product->user_id;
             $detail->save();
 
