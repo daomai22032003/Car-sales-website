@@ -41,6 +41,15 @@
                                 <input type="file" class="" id="image" name="image">
                             </div>
                             <div class="form-group">
+                                <label>Ảnh ngoại thất</label>
+                                <input type="file" name="exterior_images[]" multiple class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ảnh nội thất</label>
+                                <input type="file" name="interior_images[]" multiple class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <label for="exampleInputFile">Số lượng</label>
                                 <input type="number" class="form-control w-50" id="stock" name="stock" value="0" min="0">
                             </div>

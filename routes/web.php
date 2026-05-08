@@ -2,12 +2,16 @@
 
 // Trang chủ
 Route::get('/', [App\Http\Controllers\ShopController::class, 'index'])->name('trangchu');
-
+// SHOWROOM
+Route::get('/showroom/{slug}', [App\Http\Controllers\VendorController::class, 'detail'])
+    ->name('vendor.detail');
 Route::get('/lien-he', [App\Http\Controllers\ShopController::class, 'contact'])->name('shop.contact');
 Route::post('/lien-he', [App\Http\Controllers\ShopController::class, 'contactStore'])->name('shop.contactStore');
 Route::get('/tra-cuu-don-hang', [App\Http\Controllers\ShopController::class, 'orderHistory'])->name('shop.orderHistory');
 Route::post('/tra-cuu-don-hang', [App\Http\Controllers\ShopController::class, 'searchOrder'])->name('shop.search.order');
-
+Route::get('/dat-coc', function () {
+    return view('shop.deposit');
+})->name('shop.deposit');
 // Danh mục
 Route::get('/danh-muc/{slug}', [App\Http\Controllers\ShopController::class, 'getProductsByCategory'])->name('shop.category');
 
@@ -76,7 +80,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     Route::resource('vendor', App\Http\Controllers\VendorController::class);
     // Ql Người dùng
     Route::resource('user', App\Http\Controllers\UserController::class);
-
+    // ql màu xe
+    Route::resource('product-color',App\Http\Controllers\ProductColorController::class);
+    
     // Ql Đơn hàng
     Route::post('order/remove-to-cart', [App\Http\Controllers\OrderController::class, 'removeToCart'])->name('order.remove');
 
@@ -88,7 +94,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin
     // dashboard
     Route::get('dashboard/show-char', [App\Http\Controllers\AdminController::class, 'showChar'])->name('dashboard.showChar');
     Route::post('dashboard/filter', [App\Http\Controllers\AdminController::class, 'filterChar'])->name('dashboard.filterChar');
-
+    
 
 
     // Thống kê
@@ -104,6 +110,8 @@ Route::post('/dang-xuat', [App\Http\Controllers\Auth\LoginController::class, 'lo
 
 // Member Routes
 Route::group(['middleware' => 'auth'], function () {
+    Route::post('/danh-gia', [App\Http\Controllers\ReviewController::class, 'store'])
+    ->name('reviews.store');
     Route::get('/lich-su-don-hang', [App\Http\Controllers\MemberOrderController::class, 'history'])->name('member.order.history');
     Route::get('/chi-tiet-don-hang/{id}', [App\Http\Controllers\MemberOrderController::class, 'detail'])->name('member.order.detail');
     Route::get('/thong-tin-ca-nhan', [App\Http\Controllers\MemberOrderController::class, 'profile'])->name('member.profile');

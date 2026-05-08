@@ -5,191 +5,157 @@ namespace App\Http\Controllers;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
 class VendorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // ================== LIST ==================
     public function index()
     {
-        $data = Vendor::all(); // lấy toàn bộ dữ liệu
-        // gọi đến view
-        return view('admin.vendor.index', [
-            'data' => $data // truyền dữ liệu sang view Index
-        ]);
+        $data = Vendor::orderBy('id', 'desc')->get();
+
+        return view('admin.vendor.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // ================== CREATE ==================
     public function create()
     {
-        // gọi đến view create
         return view('admin.vendor.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    // ================== STORE ==================
     public function store(Request $request)
     {
-        //validate dữ liệu
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000'
         ]);
 
-        //Khởi tạo Model và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
         $vendor = new Vendor();
-        $vendor->name = $request->input('name');
-        $vendor->slug = str::slug($request->input('name')); // slug
 
-        // email
-        $vendor->email = $request->input('email');
-        // phone
-        $vendor->phone = $request->input('phone');
+        $vendor->name = $request->name;
+        $vendor->slug = Str::slug($request->name);
 
+        $vendor->email = $request->email;
+        $vendor->phone = $request->phone;
+        $vendor->website = $request->website;
+        $vendor->address = $request->address;
 
-        if ($request->hasFile('image')) { // dòng này Kiểm tra xem có image có được chọn
-            // get file
+        // 🔥 FIELD QUAN TRỌNG
+        $vendor->open_time = $request->open_time;
+        $vendor->manager_name = $request->manager_name;
+        $vendor->description = $request->description;
+        $vendor->map_url = $request->map_url;
+
+        $vendor->position = $request->position ?? 0;
+        $vendor->is_active = $request->has('is_active') ? 1 : 0;
+
+        // upload ảnh
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
-            // đặt tên cho file image
-            $filename = time().'_'.$file->getClientOriginalName(); // $file->getClientOriginalName() == tên ban đầu của image
-            // Định nghĩa đường dẫn sẽ upload lên
-            $path_upload = 'uploads/category/'; // uploads/brand ; uploads/vendor
-            // Thực hiện upload file
-            $request->file('image')->move($path_upload,$filename);
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/vendors/';
 
-            $vendor->image = $path_upload.$filename;
-        }
-        // website
-        $vendor->website = $request->input('website');
-         // address
-         $vendor->address = $request->input('address');
-         // Vị trí
-        $vendor->position = $request->input('position');
+            $file->move(public_path($path), $filename);
 
-        // Trạng thái
-        if ($request->has('is_active')){//kiem tra is_active co ton tai khong?
-            $vendor->is_active = $request->input('is_active');
+            $vendor->image = $path . $filename;
         }
 
-        // Lưu
         $vendor->save();
 
-        // Chuyển hướng trang về trang danh sách
-        return redirect()->route('admin.vendor.index');
+        return redirect()->route('admin.vendor.index')
+                         ->with('success', 'Thêm thành công!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    // ================== SHOW ==================
     public function show($id)
     {
-        // Sử dụng hàm findorFail tìm kiếm theo Id, nếu tìm thấy sẽ trả về object , nếu không trả về lỗi
-        $data = Vendor::findorFail($id);
+        $data = Vendor::findOrFail($id);
 
-        // Gọi tới view
-        return view('admin.vendor.show', [
-            'data' => $data // truyền dữ liệu sang view show
-        ]);
+        return view('admin.vendor.show', compact('data'));
     }
 
+    // ================== EDIT ==================
     public function edit($id)
     {
-        // Sử dụng hàm findorFail tìm kiếm theo Id, nếu tìm thấy sẽ trả về object , nếu không trả về lỗi
-        $vendor = Vendor::findorFail($id);
+        $vendor = Vendor::findOrFail($id);
 
-        return view('admin.vendor.edit', [
-            'vendor' => $vendor
-        ]);
+        return view('admin.vendor.edit', compact('vendor'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    // ================== UPDATE ==================
     public function update(Request $request, $id)
     {
-        //validate dữ liệu
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => 'required|max:255',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000'
+            'new_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000'
         ]);
 
-        //Lấy đối tượng  và gán giá trị từ form cho những thuộc tính của đối tượng (cột trong CSDL)
-        $vendor = Vendor::findorFail($id);
-        $vendor->name = $request->input('name');
-        $vendor->slug = str::slug($request->input('name')); // slug
+        $vendor = Vendor::findOrFail($id);
 
+        $vendor->name = $request->name;
+        $vendor->slug = Str::slug($request->name);
 
-        // email
-        $vendor->email = $request->input('email');
-        // phone
-        $vendor->phone = $request->input('phone');
+        $vendor->email = $request->email;
+        $vendor->phone = $request->phone;
+        $vendor->website = $request->website;
+        $vendor->address = $request->address;
 
-        if ($request->hasFile('new_image')) { // dòng này Kiểm tra xem có image có được chọn
-            // xóa file cũ
-            @unlink(public_path($vendor->image)); // hàm unlink của PHP không phải laravel , chúng ta thêm @ đằng trước tránh bị lỗi
-            // get new_image
+        // 🔥 FIELD QUAN TRỌNG
+        $vendor->open_time = $request->open_time;
+        $vendor->manager_name = $request->manager_name;
+        $vendor->description = $request->description;
+        $vendor->map_url = $request->map_url;
+
+        $vendor->position = $request->position ?? 0;
+        $vendor->is_active = $request->has('is_active') ? 1 : 0;
+
+        // upload ảnh mới
+        if ($request->hasFile('new_image')) {
+
+            // xóa ảnh cũ
+            if ($vendor->image && file_exists(public_path($vendor->image))) {
+                unlink(public_path($vendor->image));
+            }
+
             $file = $request->file('new_image');
-            // đặt tên cho file new_image
-            $filename = time().'_'.$file->getClientOriginalName(); // $file->getClientOriginalName() == tên ban đầu của image
-            // Định nghĩa đường dẫn sẽ upload lên
-            $path_upload = 'uploads/category/';
-            // Thực hiện upload file
-            $request->file('new_image')->move($path_upload,$filename);
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/vendors/';
 
-            $vendor->image = $path_upload.$filename; // gán giá trị ảnh mới cho thuộc tính image của đối tượng
+            $file->move(public_path($path), $filename);
+
+            $vendor->image = $path . $filename;
         }
 
-            // website
-            $vendor->website = $request->input('website');
-
-        // địa chỉ
-        $vendor->address = $request->input('address');
-        // Trạng thái
-
-        if ($request->has('is_active')) {//kiem tra is_active co ton tai khong?
-            $vendor->is_active = $request->input('is_active');
-        }
-        // Vị trí
-        $vendor->position = $request->input('position');
-
-        // Lưu
         $vendor->save();
 
-        // Chuyển hướng trang về trang danh sách
-        return redirect()->route('admin.vendor.index');
+        return redirect()->route('admin.vendor.index')
+                         ->with('success', 'Cập nhật thành công!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    // ================== DELETE ==================
     public function destroy($id)
     {
-        // gọi tới hàm destroy của laravel để xóa 1 object
-        Vendor::destroy($id);
+        $vendor = Vendor::findOrFail($id);
 
-        // Trả về dữ liệu json và trạng thái kèm theo thành công là 200
+        // xóa ảnh nếu có
+        if ($vendor->image && file_exists(public_path($vendor->image))) {
+            unlink(public_path($vendor->image));
+        }
+
+        $vendor->delete();
+
         return response()->json([
             'status' => true
-        ], 200);
+        ]);
+    }
+
+    // ================== DETAIL FRONTEND ==================
+    public function detail($slug)
+    {
+        $vendor = Vendor::where('slug', $slug)
+            ->where('is_active', 1)
+            ->firstOrFail();
+
+        return view('shop.vendor_detail', compact('vendor'));
     }
 }

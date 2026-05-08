@@ -62,6 +62,35 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
         }
+        /* khung form */
+.contact-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+/* input + textarea */
+.input-feild,
+.contact-text {
+    border-radius: 8px !important;
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+}
+
+/* khi focus */
+.input-feild:focus,
+.contact-text:focus {
+    border-color: #e3007b;
+    outline: none;
+}
+
+/* label cho gọn */
+.contact-form label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
     </style>
     <section class="main-content-section">
         <div class="container">

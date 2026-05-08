@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-12">
-                <span><i class="fa fa-envelope"></i> hotro@dailyxe.com.vn</span>
+                <span><i class="fa fa-envelope"></i> daomai2203@gmail.com</span>
             </div>
             <div class="col-md-6 col-sm-12 text-right top-links">
                 @guest
@@ -43,28 +43,46 @@
         <div class="row" style="display: flex; align-items: center;">
             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
                 <a href="/" class="logo">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="DailyXe"
+                    <img src="{{ asset('images/logoshopdaomai.png') }}" alt="DailyXe"
                         style="height: 55px; margin-top: -5px;">
                 </a>
             </div>
             <div class="col-lg-7 col-md-7 hidden-sm hidden-xs">
                 <nav class="nav-menu">
                     <ul>
-                        <li><a href="#">SHOWROOM <i class="fa fa-angle-down"></i></a></li>
+                       <li class="menu-item mega-parent">
+                            <a href="#">SHOWROOM <i class="fa fa-angle-down"></i></a>
+
+                            <div class="mega-menu">
+                                <div class="mega-title">HỆ THỐNG SHOWROOM</div>
+
+                                <div class="mega-grid">
+                                    @foreach($vendors as $vendor)
+                                        <a href="{{ route('vendor.detail', $vendor->slug) }}" class="mega-item">
+                                            {{ $vendor->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </li>
                             <li class="menu-item mega-parent">
                                 <a href="#">TÌM XE <i class="fa fa-angle-down"></i></a>
-
                                 <div class="mega-menu">
-                                    <div class="mega-title">DANH MỤC XE</div>
+                                    <div class="mega-title">THƯƠNG HIỆU XE</div>
 
-                                    <div class="mega-grid">
+                                    <div class="brand-grid">
                                         @foreach($categories as $cat)
-                                            <a href="{{ route('shop.category', $cat->slug) }}" class="mega-item">
-                                                {{ $cat->name }}
+                                            <a href="{{ route('shop.category', $cat->slug) }}" class="brand-item">
+
+                                                <img src="{{ asset($cat->image) }}" alt="">
+
+                                                <span>{{ $cat->name }}</span>
+
                                             </a>
                                         @endforeach
                                     </div>
                                 </div>
+                                
                             </li>
                         <li><a href="{{ route('shop.article') }}">TIN TỨC </li>
                         <li><a href="">LIÊN HỆ </a></li>

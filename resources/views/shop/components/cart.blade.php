@@ -39,127 +39,105 @@ $totalPrice += $item->quantity * $price;
 @endphp
 
 @if(count($products) > 0)
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="row" style="margin-bottom: 20px">
-            <div class="col-lg-6"></div><!-- /.col-lg-6 -->
-            <div class="col-lg-6">
-                <form action="{{ route('shop.cart.check-coupon') }}" method="get">
-                    <div class="input-group">
-                        <input value="{{ $coupon }}" name="coupon_code" style="width: 200px; float: right" type="text"
-                            class="form-control" placeholder="Nhập mã khuyến mại">
-                        <span class="input-group-btn">
-                            <button style="color: white; background: #e3007b; border-color: #e3007b;"
-                                class="btn btn-default" type="submit">Áp dụng</button>
-                        </span>
-                    </div>
-                </form>
-                @if($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <p style="text-align: right;color: red;">{{ $error }}</p>
-                    @endforeach
-                @endif
-            </div><!-- /.col-lg-6 -->
-        </div><!-- /.row -->
-    </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="cart-summary">
-                <!-- TABLE HEADER START -->
-                <thead>
+<style>
+    
+</style>
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="table-responsive">
+        <table class="table " id="cart-summary" style="border-collapse: collapse; margin-bottom: 0;">
+            <thead>
+                <tr style="background: #fcfcfc;">
+                    <th class="text-center" style="width: 55%; padding: 10px;">Sản phẩm</th>
+                    <th class="text-center" style="width: 10%; border-left: 1px solid #ddd;">Số lượng</th>
+                    <th class="text-right" style="width: 30%; border-left: 1px solid #ddd; padding-right: 20px;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($products as $product)
+                    @php
+                        $price = ($product['item']->sale > 0) ? $product['item']->sale : $product['item']->price;
+                    @endphp
                     <tr>
-                        <th class="cart-product">Ảnh</th>
-                        <th class="cart-description text-center">Sản phẩm</th>
-                        <th class="cart-unit text-center">Giá</th>
-                        <th class="cart_quantity text-center">Số lượng</th>
-                        <th class="cart-total text-right">Thành tiền</th>
-                        <th class="cart-delete text-center">&nbsp;</th>
-                    </tr>
-                </thead>
-                <!-- TABLE HEADER END -->
-                <!-- TABLE BODY START -->
-                <tbody>
-                    @foreach($products as $product)
-                        <tr>
-                            <td class="cart-product">
-                                <a href="#"><img src="{{ asset($product['item']->image) }}"
-                                        alt="{{ $product['item']->name }}"></a>
-                            </td>
-                            <td class="cart-description">
-                                <p class="product-name"><a href="#">{{ $product['item']->name }}</a></p>
-                                <small>SKU : {{ $product['item']->sku }}</small>
-                            </td>
-                            <td class="cart-unit">
-                                     @php
-                                            $price = ($product['item']->sale > 0)
-                                                ? $product['item']->sale
-                                                : $product['item']->price;
-                                        @endphp
-                                <ul class="price text-right">
-                                    <li class="price-percent-reduction small">
-                                        
-
-                                        {{ number_format($price, 0, ",", ".") }} đ
-                                    </li>
-                                   @if($product['item']->sale > 0 && $product['item']->sale < $product['item']->price)
-                                        <li class="old-price">@php
-                                            $price = ($product['item']->sale > 0)
-                                                ? $product['item']->sale
-                                                : $product['item']->price;
-                                        @endphp
-
-                                        {{ number_format($price, 0, ",", ".") }}  đ</li>
-                                    @endif
-                                </ul>
-                            </td>
-                            <td class="cart_quantity text-center">
-                                <div class="">
-                                    <input min="1" class="cart-plus-minus item-qty" data-id="{{ $product['item']->id }}"
-                                        data-num="{{ $product['qty'] }}" type="number" name="qty" value="{{ $product['qty'] }}">
+                        <!-- Cột Sản phẩm: Ép padding cực nhỏ để khung co lại -->
+                        <td style="padding: 5px 15px; vertical-align: middle;">
+                            <div style="display: flex; align-items: center;">
+                                <!-- Khối ảnh: Fix cứng chiều cao nếu cần để khung không bị giãn -->
+                                <div style="width: 180px; flex-shrink: 0; margin-right: 20px; display: flex; align-items: center;">
+                                    <img src="{{ asset($product['item']->image) }}" 
+                                         alt="{{ $product['item']->name }}" 
+                                         style="width: 100%; height: auto; display: block; border-radius: 4px;">
                                 </div>
-                            </td>
-                            <td class="cart-total">
-                                <span class="price">
-                                    @php
-                                    $price = ($product['item']->sale > 0)
-                                        ? $product['item']->sale
-                                        : $product['item']->price;
-                                @endphp
+                                <!-- Khối thông tin: Dùng line-height chặt chẽ -->
+                                <div style="line-height: 1.2;">
+                                    <h4 style="margin: 0 0 3px 0; font-weight: bold; color: #333; font-size: 15px;">
+                                        {{ $product['item']->name }}
+                                    </h4>
+                                    <p style="margin: 0; color: #666; font-size: 12px;">SKU: {{ $product['item']->sku }}</p>
+                                    <div style="margin-top: 5px; font-size: 11px; color: #999;">
+                                        <span style="display: block;">• Động cơ: Tăng áp 1.5L</span>
+                                        <span style="display: block;">• Tình trạng: Mới 100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
 
-                                {{ number_format($product['qty'] * $price, 0, ",", ".") }}đ</span>
-                            </td>
-                            <td class="cart-delete text-center">
-                                <a data-id="{{ $product['item']->id }}" href="javascript:void(0)"
-                                    class="cart_quantity_delete remove-to-cart" title="Xóa sản phẩm">
-                                    <i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach
-                    <!-- SINGLE CART_ITEM END -->
-                </tbody>
-                <!-- TABLE BODY END -->
-                <!-- TABLE FOOTER START -->
-                <tfoot>
-                    <tr>
-                        <td class="text-right" colspan="4">Tạm tính</td>
-                        <td class="price" colspan="2">
-                            <span>{{ number_format($totalPrice, 0, ",", ".") }} đ</span>
+                        <!-- Cột Số lượng: Triệt tiêu padding thừa -->
+                        <td class="text-center" style="vertical-align: middle; border-left: 1px solid #ddd; padding: 0;">
+                            <input min="1" class="form-control text-center item-qty" 
+                                   style="width: 60px; height: 30px; padding: 0; display: inline-block; font-weight: bold;"
+                                   data-id="{{ $product['item']->id }}"
+                                   data-num="{{ $product['qty'] }}" 
+                                   type="number" name="qty" value="{{ $product['qty'] }}">
+                        </td>
+
+                        <!-- Cột Thành tiền: Triệt tiêu padding thừa -->
+                        <td class="text-right" style="vertical-align: middle; border-left: 1px solid #ddd; padding: 0 20px 0 0;">
+                            <div style="display: flex; justify-content: flex-end; align-items: center;">
+                                <span style="font-weight: bold; color: #333; font-size: 16px; margin-right: 15px;">
+                                    {{ number_format($product['qty'] * $price, 0, ",", ".") }}đ
+                                </span>
+                                <a data-id="{{ $product['item']->id }}" href="javascript:void(0)" 
+                                   class="remove-to-cart" style="color: #666;" title="Xóa">
+                                    <i class="fa fa-trash-o" style="font-size: 16px;"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="text-right" colspan="4">Giảm giá</td>
-                        <td class="price" colspan="2"><span>- {{ number_format($discount, 0, ",", ".") }} đ</span></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right" colspan="4">Thanh toán</td>
-                        <td class="price" colspan="2"><span style="color: red">{{ number_format($payment, 0, ",", ".") }}
-                                đ</span></td>
-                    </tr>
-                </tfoot>
-                <!-- TABLE FOOTER END -->
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+            
+           <tfoot>
+    <tr>
+        <td colspan="2" class="text-right" style="padding: 5px 10px; color: #888; font-size: 13px;">
+            Tạm tính:
+        </td>
+        <td class="text-right" style="padding: 5px 20px 5px 0; font-weight: bold;">
+            {{ number_format($totalPrice, 0, ",", ".") }} đ
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="text-right" style="padding: 5px 10px; color: #888; font-size: 13px;">
+            Giảm giá:
+        </td>
+        <td class="text-right" style="padding: 5px 20px 5px 0; color: #28a745;">
+            - {{ number_format($discount, 0, ",", ".") }} đ
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" class="text-right" style="padding: 10px; font-weight: bold;">
+            Thanh toán:
+        </td>
+        <td class="text-right" style="padding: 10px 20px 10px 0; color: #e3007b; font-size: 18px; font-weight: bold;">
+            {{ number_format($payment, 0, ",", ".") }} đ
+        </td>
+    </tr>
+    
+</tfoot>
+        </table>
     </div>
+</div>
     @section('my_javascript')
         <script type="text/javascript">
             $(function () {
@@ -237,7 +215,8 @@ $totalPrice += $item->quantity * $price;
             text-transform: uppercase;
             border: 1px solid #288ad6;
             border-radius: 4px;
-        }
+            
+        }      
     </style>
     <h3 class="text-center"><i class="fa fa-opencart"></i>Bạn chưa có sản phẩm nào trong giỏ hàng</h3>
     <a href="/" class="buyother"><i class="fa fa-chevron-left"></i> Về trang chủ</a>

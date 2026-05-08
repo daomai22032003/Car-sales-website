@@ -34,7 +34,7 @@
                                 <input type="file" id="new_image" name="new_image">
                                 <!-- Hiển thị ảnh cũ -->
                                 <br>
-                                <img src="{{ asset($banner->image) }}" width="250">
+                                <img src="{{ asset('storage/' . $banner->image) }}" width="250">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tùy chỉnh liên kết Url</label>

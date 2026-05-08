@@ -173,9 +173,9 @@
 
     <!-- bootstrap js -->
     <script src="shop/js/bootstrap.min.js"></script>
-
     <!-- wow js -->
     <script src="shop/js/wow.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
         new WOW().init();
     </script>
@@ -238,5 +238,9 @@
     @yield('my_javascript')
 
 </body>
-
+<script src="https://app.tudongchat.com/js/chatbox.js"></script>
+<script>
+  const tudong_chatbox = new TuDongChat('ITX6xsIx-vZVJiS-826S0')
+  tudong_chatbox.initial()
+</script>
 </html>

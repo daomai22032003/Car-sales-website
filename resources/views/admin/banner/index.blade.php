@@ -41,7 +41,7 @@
                                     <td>{{ $item->title }}</td>
                                     <td>
                                         @if ($item->image) <!-- Kiểm tra hình ảnh tồn tại -->
-                                            <img src="{{asset($item->image)}}" width="50" height="50">
+                                            <img src="{{ asset('storage/' . $item->image) }}" width="50" height="50">
                                         @endif
                                     </td>
                                     <td>{{ ($item->target == 1) ? '_blank' : '_self' }}</td>

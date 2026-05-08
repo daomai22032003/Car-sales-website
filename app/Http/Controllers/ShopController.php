@@ -106,120 +106,97 @@ class ShopController extends GeneralController
 
 
     // lấy san phan theo danh mục
-    public function getProductsByCategory(Request $request, $slug)
-    {
+   public function getProductsByCategory(Request $request, $slug)
+{
+    // ===== 1. Lấy category =====
+    $cate = Category::where('slug', $slug)->first();
+    if (!$cate) {
+        return $this->notfound();
+    }
 
-        $filter_brands = $request->query('thuong-hieu');
-        $filter_price = $request->query('gia');
-        $filter_sort = $request->query('sap-sep');
+    // ===== 2. Lấy tất cả id category (cha + con) =====
+    $ids = [$cate->id];
 
-        $branch_ids = [];
-        if ($filter_brands) {
-            $arr_filter_brands = explode(',', $filter_brands); // ['apple', 'xiaomi', 'dell']
-            $arr_brands = Brand::whereIn('slug', $arr_filter_brands)->get();
-
-            foreach ($arr_brands as $item) {
-                $branch_ids[] = $item->id; // thêm phần tử vào mảng
-            }
-        }
-
-        // THuong hieu
-        $branchs = Brand::all();
-        // step 1 : lấy chi tiết thể loại
-        $cate = Category::where(['slug' => $slug])->first();
-
-        if ($cate) {
-            // step 1.1 Check danh mục cha -> lấy toàn bộ danh mục con để where In
-            $ids = []; // mảng lưu toàn id của danh mục cha + id - danh mục con
-
-            $ids[] = $cate->id; // 1
-            $child_categories = []; // lưu danh mục con
-
-            foreach ($this->categories as $child) {
-                if ($child->parent_id == $cate->id) {
-                    $ids[] = $child->id; // thêm id của danh mục con vào mảng ids
-                    $child_categories[] = $child;
-                }
-            } // ids = 1,7,8,9,11
-
-            // step 2 : lấy list sản phẩm theo thể loại
-            //$list_products = Product::where(['is_active' => 1])
-            //                    ->whereIn('category_id' , $ids)
-            //                    ->latest()
-            //                    ->paginate(16);
-
-            $query = DB::table('products')->select('*')
-                ->whereIn('category_id', $ids)
-                ->where('is_active', '=', 1);
-            // Lọc theo thương hiệu
-            if (!empty($branch_ids)) {
-                $query->whereIn('brand_id', $branch_ids);
-            }
-
-            // Lọc theo giá
-            if ($filter_price) {
-    $arr_price = explode('-', $filter_price);
-
-    $min_price = (int) ($arr_price[0] ?? 0);
-    $max_price = (int) ($arr_price[1] ?? 0);
-
-    $query->where(function ($q) use ($min_price, $max_price) {
-
-        if ($max_price > 0) {
-            // khoảng giá
-            $q->whereBetween(DB::raw('(CASE WHEN sale > 0 THEN sale ELSE price END)'), [$min_price, $max_price]);
-        } else {
-            // trường hợp "trên xxx"
-            $q->where(DB::raw('(CASE WHEN sale > 0 THEN sale ELSE price END)'), '>=', $min_price);
-        }
-
-    });
-}
-
-            // Sắp sếp
-            if ($filter_sort) {
-                if ($filter_sort == 'noi-bat') {
-                    $query->orderBy('is_hot', 'DESC');
-                } elseif ($filter_sort == 'ban-chay-nhat') {
-                    // tinh don dat hang
-
-                } elseif ($filter_sort == 'gia-thap-den-cao') {
-                    $query->orderByRaw('(CASE WHEN sale > 0 THEN sale ELSE price END) ASC');
-                }
-                elseif ($filter_sort == 'gia-cao-den-thap') {
-                    $query->orderByRaw('(CASE WHEN sale > 0 THEN sale ELSE price END) DESC');
-                }
-
-            } else {
-                $query->orderBy('id', 'DESC');
-            }
-
-            $list_products = $query->paginate(16);
-            ;
-
-            return view('shop.products-by-category', [
-                'category' => $cate,
-                'products' => $list_products,
-                'branchs' => $branchs, // thương hiệu
-                'filter_sort' => $filter_sort,
-                'filter_price' => $filter_price ? $filter_price : '',
-                'arr_filter_brands' => json_encode($branch_ids)
-            ]);
-
-        } else {
-            return $this->notfound();
+    foreach ($this->categories as $child) {
+        if ($child->parent_id == $cate->id) {
+            $ids[] = $child->id;
         }
     }
 
+    // ===== 3. Khởi tạo QUERY (QUAN TRỌNG) =====
+    $query = Product::with('specs')
+        ->whereIn('category_id', $ids)
+        ->where('is_active', 1);
+
+    // ===== 4. LẤY FILTER =====
+    $filter_seats   = $request->seats;
+    $filter_gearbox = $request->gearbox;
+    $filter_price   = $request->price;
+    $filter_keyword = $request->keyword;
+    $filter_brand   = $request->brand;
+    // ===== 5. FILTER specs =====
+    // ===== FILTER LOẠI XE (brand) =====
+    if ($filter_brand) {
+        $query->where('brand_id', $filter_brand);
+    }
+    // Số chỗ
+    if ($filter_seats) {
+        $query->whereHas('specs', function ($q) use ($filter_seats) {
+            $q->where('key', 'seats')
+              ->where('value', $filter_seats);
+        });
+    }
+
+    // Hộp số
+    if ($filter_gearbox) {
+        $query->whereHas('specs', function ($q) use ($filter_gearbox) {
+            $q->where('key', 'gearbox')
+              ->where('value', $filter_gearbox);
+        });
+    }
+
+    // ===== 6. FILTER giá =====
+    if ($filter_price) {
+        $range = explode('-', $filter_price);
+
+        $min = (int)$range[0] * 1000000;
+        $max = (int)($range[1] ?? 0) * 1000000;
+
+        if ($max > 0) {
+            $query->whereBetween('price', [$min, $max]);
+        } else {
+            $query->where('price', '>=', $min);
+        }
+    }
+
+    // ===== 7. SEARCH keyword =====
+    if ($filter_keyword) {
+        $query->where('name', 'like', '%' . $filter_keyword . '%');
+    }
+
+    // ===== 8. SORT =====
+    $query->orderBy('id', 'DESC');
+
+    // ===== 9. PAGINATE =====
+    $products = $query->paginate(16);
+
+    // ===== 10. RETURN VIEW =====
+    return view('shop.products-by-category', [
+        'category' => $cate,
+        'products' => $products,
+    ]);
+}
     // Chi tiet san pham
     public function getProduct($slug, $id)
     {
         // get chi tiet sp
         $product = Product::find($id);
+        
         if (!$product) {
             return $this->notfound();
         }
-
+        $exteriorImages = $product->images()->where('type', 'exterior')->get();
+        $interiorImages = $product->images()->where('type', 'interior')->get();
         // khai báo mảng chứa danh sách các sản phẩm đã xem
         $viewedProducts = [];
 
@@ -280,7 +257,9 @@ class ShopController extends GeneralController
             'product' => $product,
             'relatedProducts' => $relatedProducts,
             'tags' => $tags,
-            'viewedProducts' => $viewedProducts
+            'viewedProducts' => $viewedProducts,
+            'exteriorImages' => $exteriorImages,
+            'interiorImages' => $interiorImages
         ]);
     }
 
@@ -289,65 +268,77 @@ class ShopController extends GeneralController
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function search(Request $request)
-    {
-        // 1. Lấy tham số
-        $keyword = $request->input('tu-khoa');
-        $brandId = $request->input('brand');
-        $model = $request->input('model');
-        $priceRange = $request->input('price');
+   
 
-        $query = Product::where('is_active', 1);
-        $filterLabels = [];
+public function search(Request $request)
+{
+    $query = Product::where('is_active', 1);
 
-        // Tìm kiếm theo từ khóa (slug)
-        if ($keyword) {
-            $slug = Str::slug($keyword);
-            $query->where('slug', 'like', '%' . $slug . '%');
-            $filterLabels[] = "\"$keyword\"";
+    // ===== LẤY PARAM =====
+    $keyword     = $request->input('keyword');
+    $categoryId  = $request->input('category');
+    $priceRange  = $request->input('price');
+
+    $filterLabels = [];
+
+    // ===== CATEGORY (HÃNG XE) =====
+    $category = null;
+    if ($categoryId) {
+        $query->where('category_id', $categoryId);
+
+        $category = Category::find($categoryId);
+        if ($category) {
+            $filterLabels[] = "Hãng xe: " . $category->name;
         }
-
-        // Lọc theo thương hiệu
-        if ($brandId) {
-            $query->where('brand_id', $brandId);
-            $brand = Brand::find($brandId);
-            if ($brand) {
-                $filterLabels[] = "Thương hiệu: " . $brand->name;
-            }
-        }
-
-        // Lọc theo dòng xe (tìm trong tên)
-        if ($model) {
-            $query->where('name', 'like', '%' . $model . '%');
-            $filterLabels[] = "Dòng xe: " . $model;
-        }
-
-        // Lọc theo khoảng giá (đơn vị: triệu đồng)
-        if ($priceRange) {
-            $range = explode('-', $priceRange);
-            if (count($range) == 2) {
-                $min = $range[0] * 1000000;
-                $max = $range[1] * 1000000;
-                $query->whereBetween('sale', [$min, $max]);
-                $filterLabels[] = "Giá: " . $range[0] . " - " . $range[1] . " triệu";
-            }
-        }
-
-        $products = $query->paginate(20);
-        $totalResult = $products->total();
-
-        $displayKeyword = implode(' - ', $filterLabels);
-        if (empty($displayKeyword)) {
-            $displayKeyword = "Tất cả sản phẩm";
-        }
-
-        return view('shop.search', [
-            'products' => $products,
-            'totalResult' => $totalResult,
-            'keyword' => $displayKeyword
-        ]);
     }
 
+    // ===== KEYWORD =====
+    if ($keyword) {
+        $query->where('name', 'like', "%$keyword%");
+        $filterLabels[] = "\"$keyword\"";
+    }
+
+    // ===== PRICE =====
+    if ($priceRange) {
+        $range = explode('-', $priceRange);
+
+        if (count($range) == 2) {
+            $min = $range[0] * 1000000;
+            $max = $range[1] * 1000000;
+
+            $query->where(function ($q) use ($min, $max) {
+                $q->whereBetween('sale', [$min, $max])
+                  ->orWhere(function ($q2) use ($min, $max) {
+                      $q2->where('sale', 0)
+                         ->whereBetween('price', [$min, $max]);
+                  });
+            });
+
+            $filterLabels[] = "Giá: {$range[0]} - {$range[1]} triệu";
+        }
+    }
+
+    // ===== PAGINATE =====
+    $products = $query->paginate(20)->appends($request->all());
+    $totalResult = $products->total();
+
+    // ===== TEXT HIỂN THỊ =====
+    $displayKeyword = implode(' - ', $filterLabels);
+    if (empty($displayKeyword)) {
+        $displayKeyword = "Tất cả sản phẩm";
+    }
+
+    // ===== LẤY DANH SÁCH CATEGORY =====
+    $categories = Category::all();
+
+    return view('shop.search', [
+        'products'     => $products,
+        'totalResult'  => $totalResult,
+        'keyword'      => $displayKeyword,
+        'category'     => $category,
+        'categories'   => $categories
+    ]);
+}
     public function searchOrder(Request $request)
     {
         $orderCode = $request->input('ma-don-hang');

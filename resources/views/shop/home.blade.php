@@ -10,7 +10,7 @@
                 <div class="owl-carousel my-slider">
                     @foreach($banners as $banner)
                         <div class="item">
-                            <img src="{{ asset($banner->image) }}" alt="Banner" style="width: 100%; height: auto; display: block;">
+                            <img src="{{ asset('storage/' . $banner->image) }}" alt="Banner" style="width: 100%; height: auto; display: block;">
                         </div>
                     @endforeach
                 </div>
@@ -46,14 +46,17 @@
                                             <form action="{{ route('shop.search') }}" method="GET">
                                                 <div class="filter-inputs"
                                                     style="display: flex; gap: 12px; margin-bottom: 12px;">
-                                                    <select name="brand" class="form-control"
+                                                    <select name="category" class="form-control"
                                                         style="height: 54px; border-radius: 12px; border: none; font-size: 16px; flex: 1; box-shadow: none;">
-                                                        <option value="">Chọn loại xe</option>
-                                                        @foreach($brands as $brand)
-                                                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                                        @endforeach
+                                                        <option value="">Chọn thương hiệu</option>
+                                                            @foreach($categories as $cate)
+                                                                <option value="{{ $cate->id }}">
+                                                                    {{ $cate->name }}
+                                                                </option>
+                                                            @endforeach
                                                     </select>
-                                                    <input type="text" name="model" class="form-control"
+                                                   <input type="text" name="keyword"
+                                                        class="form-control"
                                                         placeholder="Nhập dòng xe..."
                                                         style="height: 54px; border-radius: 12px; border: none; font-size: 16px; flex: 1; box-shadow: none; padding-left: 15px;">
                                                     <select name="price" class="form-control"

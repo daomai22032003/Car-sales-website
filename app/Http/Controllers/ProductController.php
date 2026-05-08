@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\ProductImage;
 class ProductController extends Controller
 {
     /**
@@ -92,6 +92,7 @@ class ProductController extends Controller
 
             $product->image = $path_upload . $filename;
         }
+         
 
         $product->stock = $request->input('stock'); // số lượng
         $product->price = $request->input('price');
@@ -112,14 +113,45 @@ class ProductController extends Controller
         if ($request->has('is_hot')) {
             $product->is_hot = $request->input('is_hot');
         }
-
+        $product->position = $request->input('position', 0);
+        $product->sku = $request->input('sku', '');
         $product->summary = $request->input('summary');
         $product->description = $request->input('description');
         $product->meta_title = $request->input('meta_title');
         $product->meta_description = $request->input('meta_description');
         $product->user_id = Auth::id(); // lưu id người tạo
         $product->save();
+       // 3. Ảnh ngoại thất
+        if ($request->hasFile('exterior_images')) {
+            foreach ($request->file('exterior_images') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path_upload = 'uploads/product/';
 
+                $file->move($path_upload, $filename);
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => $path_upload . $filename,
+                    'type' => 'exterior'
+                ]);
+            }
+        }
+
+        // 4. Ảnh nội thất
+        if ($request->hasFile('interior_images')) {
+    foreach ($request->file('interior_images') as $file) {
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path_upload = 'uploads/product/';
+
+        $file->move($path_upload, $filename);
+
+        ProductImage::create([
+            'product_id' => $product->id,
+            'image' => $path_upload . $filename,
+            'type' => 'interior'
+                ]);
+            }
+        }
         // chuyển hướng đến trang
         return redirect()->route('admin.product.index');
     }
@@ -135,7 +167,7 @@ class ProductController extends Controller
         // get data from db
         $data = Product::findorFail($id);
         $category_name = Category::where('id', $data->category_id)->first();
-
+        
         return view('admin.product.show', [
             'data' => $data,
             'category_name' => $category_name
@@ -218,14 +250,45 @@ class ProductController extends Controller
         if ($request->has('is_hot')) {
             $product->is_hot = $request->input('is_hot');
         }
-
+        $product->position = $request->input('position', 0);
+        $product->sku = $request->input('sku', '');
         $product->summary = $request->input('summary');
         $product->description = $request->input('description');
         $product->meta_title = $request->input('meta_title');
         $product->meta_description = $request->input('meta_description');
         $product->user_id = Auth::id();
         $product->save();
+        // 3. Ảnh ngoại thất
+        if ($request->hasFile('exterior_images')) {
+            foreach ($request->file('exterior_images') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path_upload = 'uploads/product/';
 
+                $file->move($path_upload, $filename);
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => $path_upload . $filename,
+                    'type' => 'exterior'
+                ]);
+            }
+        }
+
+        // 4. Ảnh nội thất
+        if ($request->hasFile('interior_images')) {
+    foreach ($request->file('interior_images') as $file) {
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path_upload = 'uploads/product/';
+
+        $file->move($path_upload, $filename);
+
+        ProductImage::create([
+            'product_id' => $product->id,
+            'image' => $path_upload . $filename,
+            'type' => 'interior'
+                ]);
+            }
+        }
         // chuyển hướng đến trang
         return redirect()->route('admin.product.index');
     }

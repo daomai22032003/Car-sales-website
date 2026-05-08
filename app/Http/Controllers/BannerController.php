@@ -39,7 +39,7 @@ class BannerController extends Controller
         // Upload ảnh (chuẩn Laravel)
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('banners', 'public');
-            $banner->image = 'storage/' . $path;
+            $banner->image = $path;
         }
 
         // Các field khác
@@ -98,7 +98,7 @@ class BannerController extends Controller
             }
 
             $path = $request->file('new_image')->store('banners', 'public');
-            $banner->image = 'storage/' . $path;
+            $banner->image = $path;
         }
 
         // Các field khác
