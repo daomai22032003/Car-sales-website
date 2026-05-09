@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\ProductColor;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -16,4 +16,11 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\OrderStatus', 'order_status_id', 'id');
     }
+    public function color()
+{
+    return $this->belongsTo(
+        ProductColor::class,
+        'product_color_id'
+    );
+}
 }

@@ -54,7 +54,14 @@
                             <input value="{{ $vendor->address }}" type="text"
                                    class="form-control" name="address">
                         </div>
+                        <div class="form-group">
+                            <label>Tỉnh / Thành phố</label>
 
+                            <input type="text"
+                                class="form-control"
+                                name="province"
+                                value="{{ $vendor->province }}">
+                        </div>
                         {{-- Open time --}}
                         <div class="form-group">
                             <label>Giờ mở cửa</label>

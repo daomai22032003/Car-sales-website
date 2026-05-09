@@ -550,10 +550,12 @@
 
             @endif
 
-            <a href="{{ route('shop.cart.add-to-cart', ['id' => $product->id]) }}"
-               class="btn-buy">
-                Đặt Hàng Ngay
-            </a>
+            <a href="{{ route('shop.deposit', $product->id) }}"
+   class="btn-buy">
+
+    Đặt xe ngay
+
+</a>
 
             @php
 

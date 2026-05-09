@@ -161,12 +161,17 @@ class CartController extends GeneralController
 
     // Hủy đơn hàng
     public function destroy(Request $request)
-    {
-        // remove session
-        $request->session()->forget('cart');
+{
+    // xóa giỏ hàng
+    $request->session()->forget('cart');
 
-        return redirect('/');
-    }
+    return redirect()
+        ->route('shop.cart')
+        ->with(
+            'msg',
+            'Đã hủy đặt hàng thành công'
+        );
+}
 
     // Trang đặt cọc thành công
     public function depositSuccess(Request $request)

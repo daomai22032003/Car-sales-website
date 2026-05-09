@@ -13,7 +13,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use App\Models\Vendor;
 class ShopController extends GeneralController
 {
 
@@ -402,5 +402,20 @@ public function search(Request $request)
 
         // chuyển về trang chủ
         return redirect('/');
+    }
+    public function deposit($id)
+    {
+        $product = Product::with('colors.images')
+                    ->findOrFail($id);
+
+        $vendors = Vendor::where('is_active',1)->get();
+
+        return view(
+            'shop.deposit',
+            compact(
+                'product',
+                'vendors'
+            )
+        );
     }
 }

@@ -47,7 +47,15 @@
                             <label>Địa chỉ</label>
                             <input type="text" class="form-control" name="address">
                         </div>
+                        {{-- Province --}}
+                        <div class="form-group">
+                            <label>Tỉnh / Thành phố</label>
 
+                            <input type="text"
+                                class="form-control"
+                                name="province"
+                                placeholder="VD: Hà Nội">
+                        </div>
                         {{-- Open time --}}
                         <div class="form-group">
                             <label>Giờ mở cửa</label>

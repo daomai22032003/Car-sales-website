@@ -91,8 +91,9 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-8 col-xs-6 text-right">
                 <i class="fa fa-search" style="margin-right: 18px; cursor: pointer; font-size: 18px; color: #555;"></i>
-                <a href="{{ route('shop.cart') }}"
-                    style="position: relative; display: inline-block; margin-right: 18px; text-decoration: none; color: #555;">
+                <a href="#"
+   id="header-cart-btn"
+   style="position: relative; display: inline-block; margin-right: 18px; text-decoration: none; color: #555;">
                     <i class="fa fa-shopping-cart" style="font-size: 22px;"></i>
                     @php
                         $totalQty = 0;
@@ -112,3 +113,47 @@
         </div>
     </div>
 </header>
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const cartBtn =
+            document.getElementById(
+                "header-cart-btn"
+            );
+
+        if(cartBtn){
+
+            cartBtn.addEventListener(
+                "click",
+                function(e){
+
+                    e.preventDefault();
+
+                    let lastDeposit =
+                        localStorage.getItem(
+                            "last_deposit_url"
+                        );
+
+                    if(lastDeposit){
+
+                        window.location.href =
+                            lastDeposit;
+
+                    }else{
+
+                        window.location.href =
+                             "{{ route('shop.empty.cart') }}";
+                    }
+
+                }
+            );
+
+        }
+
+    }
+);
+
+</script>

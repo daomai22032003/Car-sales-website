@@ -38,8 +38,8 @@ class VendorController extends Controller
         $vendor->email = $request->email;
         $vendor->phone = $request->phone;
         $vendor->website = $request->website;
-        $vendor->address = $request->address;
-
+        $vendor->address = $request->address;      
+        $vendor->province = $request->province;
         // 🔥 FIELD QUAN TRỌNG
         $vendor->open_time = $request->open_time;
         $vendor->manager_name = $request->manager_name;
@@ -99,7 +99,8 @@ class VendorController extends Controller
         $vendor->phone = $request->phone;
         $vendor->website = $request->website;
         $vendor->address = $request->address;
-
+        // STORE
+        $vendor->province = $request->province;
         // 🔥 FIELD QUAN TRỌNG
         $vendor->open_time = $request->open_time;
         $vendor->manager_name = $request->manager_name;

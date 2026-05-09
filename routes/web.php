@@ -9,9 +9,30 @@ Route::get('/lien-he', [App\Http\Controllers\ShopController::class, 'contact'])-
 Route::post('/lien-he', [App\Http\Controllers\ShopController::class, 'contactStore'])->name('shop.contactStore');
 Route::get('/tra-cuu-don-hang', [App\Http\Controllers\ShopController::class, 'orderHistory'])->name('shop.orderHistory');
 Route::post('/tra-cuu-don-hang', [App\Http\Controllers\ShopController::class, 'searchOrder'])->name('shop.search.order');
-Route::get('/dat-coc', function () {
-    return view('shop.deposit');
-})->name('shop.deposit');
+//giỏ hàng
+Route::get(
+    '/dat-coc/{id}',
+    [App\Http\Controllers\ShopController::class, 'deposit']
+)->middleware('auth')->name('shop.deposit');
+Route::post(
+    '/deposit-vnpay',
+    [App\Http\Controllers\DepositController::class, 'vnpay']
+)->name('deposit.vnpay');
+
+Route::get(
+    '/deposit-vnpay-done',
+    [App\Http\Controllers\DepositController::class, 'vnpayDone']
+)->name('deposit.vnpay_done');
+Route::get(
+    '/gio-hang-trong',
+    function () {
+        return view('shop.empty-cart');
+    }
+)->name('shop.empty.cart');
+Route::get(
+    '/huy-dat-coc',
+    [App\Http\Controllers\DepositController::class, 'destroy']
+)->name('deposit.destroy');
 // Danh mục
 Route::get('/danh-muc/{slug}', [App\Http\Controllers\ShopController::class, 'getProductsByCategory'])->name('shop.category');
 
