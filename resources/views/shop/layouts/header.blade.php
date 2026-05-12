@@ -84,8 +84,43 @@
                                 </div>
                                 
                             </li>
-                        <li><a href="{{ route('shop.article') }}">TIN TỨC </li>
-                        <li><a href="">LIÊN HỆ </a></li>
+                      <li class="menu-item utility-parent">
+
+    <a href="#">
+        TIỆN ÍCH <i class="fa fa-angle-down"></i>
+    </a>
+
+    <ul class="utility-dropdown">
+
+        <li>
+            <a href="https://zalo.me/0378034401" target="_blank">
+                Liên hệ Zalo
+            </a>
+        </li>
+
+        <li>
+            <a href="tel:0378034401" class="call-link">
+
+                <i class="fa fa-phone"></i>
+
+                Gọi tư vấn
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('shop.article') }}">
+                Tin tức xe
+            </a>
+        </li>
+        <li>
+           <a href="{{ url('/tra-gop/'.$product->slug) }}" >
+               Dự tính trả góp
+           </a>
+        </li>
+    </ul>
+
+</li>
                     </ul>
                 </nav>
             </div>

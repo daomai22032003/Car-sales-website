@@ -758,3 +758,58 @@ body {
     background: #f8f8f8;
     border-radius: 10px;
 }
+/* CSS tiện ích xe */
+.utility-parent{
+    position: relative;
+}
+
+.utility-dropdown{
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+
+    min-width: 240px;
+
+    background: #fff;
+
+   
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+    padding: 8px 0;
+
+    z-index: 9999;
+
+    display: none !important;
+
+    flex-direction: column !important;
+}
+
+.utility-parent:hover .utility-dropdown{
+    display: block !important;
+}
+
+.utility-dropdown li{
+    list-style: none;
+    width: 100%;
+}
+
+.utility-dropdown li a{
+    display: block;
+
+    padding: 12px 20px;
+
+    color: #222;
+
+    text-decoration: none;
+}
+
+.utility-dropdown li a:hover{
+    background: #f5f5f5;
+}
+.call-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}

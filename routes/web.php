@@ -33,6 +33,8 @@ Route::get(
     '/huy-dat-coc',
     [App\Http\Controllers\DepositController::class, 'destroy']
 )->name('deposit.destroy');
+// dự tính trả góp
+Route::get('/tra-gop/{slug}', [App\Http\Controllers\ProductController::class, 'installment']);
 // Danh mục
 Route::get('/danh-muc/{slug}', [App\Http\Controllers\ShopController::class, 'getProductsByCategory'])->name('shop.category');
 

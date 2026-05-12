@@ -326,4 +326,15 @@ class ProductController extends Controller
         }
         return response()->json(['status' => false]);
     }
+    public function installment($slug){
+
+    $product = Product::where('slug', $slug)->firstOrFail();
+
+    $categoriesWithProducts = Category::with('products')->get();
+
+return view('shop.installment', [
+    'product' => $product,
+    'categoriesWithProducts' => $categoriesWithProducts
+]);
+}
 }

@@ -96,14 +96,14 @@ class ProductColorController extends Controller
         return back();
     }
     public function show($id)
-{
-    $product = Product::with('colors.images')
-                ->findOrFail($id);
+    {
+        $product = Product::with('colors.images')
+                    ->findOrFail($id);
 
-    return view(
-        'admin.product_color.show',
-        compact('product')
-    );
-}
-
+        return view(
+            'admin.product_color.show',
+            compact('product')
+        );
+    }
+    
 }

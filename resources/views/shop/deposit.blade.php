@@ -7,7 +7,7 @@
 .deposit-layout{
     display:flex;
     gap:30px;
-    padding:40px;
+   padding:0 40px 40px;
     background:#f5f5f5;
     height:100vh; /* QUAN TRỌNG */
     overflow:hidden; /* chặn scroll toàn trang */
@@ -356,13 +356,49 @@ textarea.deposit-input{
     color:#777;
 }
 /* thanh công cụ */
+/* BREADCRUMB */
+.breadcrumb-custom{
+     display:flex;
+    align-items:center;
+    gap:10px;
 
+    padding:13px 40px;
+
+    background:#f5f5f5;
+
+    font-size:14px;
+}
+
+.breadcrumb-custom a{
+    text-decoration:none;
+    color:#666;
+
+    transition:.25s;
+}
+
+.breadcrumb-custom a:hover{
+    color:#1565c0;
+}
+
+.breadcrumb-custom .separator{
+    color:#999;
+}
+
+.breadcrumb-custom .active{
+    color:#1565c0;
+    font-weight:600;
+}
 </style>
-
+<div class="breadcrumb-custom"> <a href="{{ route('trangchu') }}"> 
+        <i class="fa fa-home"></i> Trang chủ </a>
+         <span class="separator">›</span> 
+         <a href="{{ route('shop.product', ['slug'=>$product->slug,'id'=>$product->id]) }}"> {{ $product->name }} </a> 
+         <span class="separator">›</span> <span class="active"> Đặt cọc </span> </div>
 <section class="deposit-layout">
 
 <!-- LEFT -->
 <div class="car-preview">
+    
    <img id="main-car-image"
  
 @if(
@@ -535,9 +571,9 @@ class="main-car-image">
 
     <!-- PRICE -->
     <div class="price-box">
-        <div class="price-label">Giá xe</div>
+        <div class="price-label">Giá xe</div><br>
         <div class="price-value" id="car-price"></div>
-    </div>
+    </div><br>
 
     <button class="deposit-btn" id="to-step-2">
         BƯỚC TIẾP THEO
