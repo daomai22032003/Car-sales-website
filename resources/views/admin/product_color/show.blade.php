@@ -2,6 +2,24 @@
 
 @section('content')
 
+<style>
+    .action-btn{
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0 !important;
+
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 8px !important;
+    }
+
+    .action-btn i{
+        font-size: 14px;
+    }
+</style>
+
 <section class="content-header">
     <h1>
         {{ $product->name }}
@@ -67,20 +85,27 @@
                             {{-- ẢNH --}}
                             <td>
                                 @foreach($color->images as $image)
+
                                     <img src="{{ asset('storage/'.$image->image) }}"
                                          width="55"
                                          style="margin-right:5px; border-radius:5px;">
+
                                 @endforeach
                             </td>
 
                             {{-- ACTION --}}
                             <td>
 
+                                {{-- SỬA --}}
                                 <a href="{{ route('admin.product-color.edit',$color->id) }}"
-                                   class="btn btn-warning btn-sm">
-                                    Sửa
+                                   class="btn btn-warning action-btn"
+                                   title="Sửa">
+
+                                    <i class="fa fa-pencil"></i>
+
                                 </a>
 
+                                {{-- XÓA --}}
                                 <form action="{{ route('admin.product-color.destroy', $color->id) }}"
                                       method="POST"
                                       style="display:inline-block;"
@@ -89,8 +114,11 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button class="btn btn-danger btn-sm">
-                                        Xóa
+                                    <button class="btn btn-danger action-btn"
+                                            title="Xóa">
+
+                                        <i class="fa fa-trash"></i>
+
                                     </button>
 
                                 </form>

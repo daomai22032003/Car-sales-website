@@ -1,7 +1,9 @@
 
 
 <style>
-
+html{
+    scroll-behavior:auto !important;
+}
 body{
     background:#f5f5f5;
 }
@@ -16,7 +18,7 @@ body{
 
 .compare-title{
     font-size:18px;
-    font-weight:800;
+    font-weight:700;
     color:#111;
     margin-bottom:24px;
     position:relative;
@@ -407,6 +409,9 @@ body{
     font-size:14px;
     font-weight:600;
     line-height:1.4;
+
+    white-space:normal;
+    word-break:break-word;
 }
 
 /* TABLE */
@@ -426,7 +431,7 @@ body{
     align-items:center;
     padding:0 14px;
     font-size:15px;
-    font-weight:800;
+    font-weight:700;
 }
 
 /* ROW */
@@ -456,7 +461,6 @@ body{
 
 .diff{
     background:#eef6ff;
-    font-weight:700;
     color:#0b57d0;
 }
 
@@ -514,7 +518,10 @@ foreach($cars as $car){
 }
 
 @endphp
-
+<div id="currentCompareCar"
+     data-id="{{ $product->id }}"
+     style="display:none;">
+</div>
 <div class="compare-page">
 
     <div class="container">
@@ -553,7 +560,9 @@ foreach($cars as $car){
                     $car = ${'car'.$i} ?? null;
                 @endphp
 
-                <div class="compare-box {{ $car ? 'has-car' : '' }}">
+               <div class="compare-box {{ $car ? 'has-car' : '' }}"
+     id="compare-car-{{ $i }}"
+     data-id="{{ $car ? $car->id : '' }}">
 
                     @if($car)
 
@@ -582,7 +591,7 @@ foreach($cars as $car){
 
                                 @endif
 
-                                triệu
+                                đ
 
                             </div>
 
@@ -769,14 +778,57 @@ function showDropdown(slot,event){
 function showCars(slot,brandName,catId){
 
     // lấy các xe đã chọn trên URL
-    let url = new URL(window.location.href);
+   let selectedCars = [];
 
-    let selectedCars = [
-        url.searchParams.get('car1'),
-        url.searchParams.get('car2'),
-        url.searchParams.get('car3'),
-        url.searchParams.get('car4')
-    ];
+/* car1 -> car4 */
+
+for(let i = 1; i <= 4; i++){
+
+    let box =
+        document.querySelector(
+            '#compare-car-'+i
+        );
+
+    if(
+        box &&
+        box.dataset.id
+    ){
+
+        selectedCars.push(
+            String(box.dataset.id)
+        );
+    }
+}
+
+/* current product */
+
+/* current product */
+
+const currentCar =
+    document.getElementById(
+        'currentCompareCar'
+    );
+
+/*
+CHỈ hide xe gốc
+khi car1 đang tồn tại
+*/
+
+const car1Box =
+    document.querySelector(
+        '#compare-car-1'
+    );
+
+if(
+    currentCar &&
+    car1Box &&
+    car1Box.dataset.id
+){
+
+    selectedCars.push(
+        String(currentCar.dataset.id)
+    );
+}
 
     // lọc xe theo hãng
     let filtered = products.filter(x => x.category_id == catId);
@@ -888,20 +940,54 @@ function backBrands(slot){
 }
 
 /* CHOOSE */
-
 function chooseCar(slot,id){
 
     let url =
         new URL(window.location.href);
 
-    url.searchParams.set('car'+slot,id);
+    /*
+    nếu chưa có car1
+    thì tự lấy product hiện tại
+    */
 
-    window.location.href =
-        url.toString();
+    if(
+        !url.searchParams.get('car1')
+    ){
+
+        const currentCar =
+            document.getElementById(
+                'currentCompareCar'
+            );
+
+        if(currentCar){
+
+            url.searchParams.set(
+                'car1',
+                currentCar.dataset.id
+            );
+        }
+    }
+
+    /* thêm xe */
+
+    url.searchParams.set(
+        'car'+slot,
+        id
+    );
+
+    url.searchParams.set(
+        'compare',
+        1
+    );
+
+    url.hash = 'compare';
+
+    location.replace(
+        url.toString()
+    );
 }
 
 /* REMOVE */
-
 function removeCar(slot,event){
 
     event.stopPropagation();
@@ -909,10 +995,20 @@ function removeCar(slot,event){
     let url =
         new URL(window.location.href);
 
-    url.searchParams.delete('car'+slot);
+    url.searchParams.delete(
+        'car'+slot
+    );
 
-    window.location.href =
-        url.toString();
+    url.searchParams.set(
+        'compare',
+        1
+    );
+
+    url.hash = 'compare';
+
+    location.replace(
+        url.toString()
+    );
 }
 
 /* SAME */
@@ -949,6 +1045,63 @@ document.addEventListener('click',function(e){
     }
 
 });
+history.scrollRestoration = 'manual';
 
+/* RESTORE NGAY LẬP TỨC */
+
+(() => {
+
+    const savedScroll =
+        sessionStorage.getItem(
+            'compareScroll'
+        );
+
+    if(savedScroll){
+
+        window.scrollTo(
+            0,
+            parseInt(savedScroll)
+        );
+
+    }
+
+})();
+
+/* SAVE */
+
+window.addEventListener(
+    'beforeunload',
+    function(){
+
+        sessionStorage.setItem(
+            'compareScroll',
+            window.scrollY
+        );
+
+    }
+);
+
+/* LOAD */
+
+window.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+        if(window.location.hash === '#compare'){
+
+            let btn = document.querySelector(
+                '[onclick*="compare"]'
+            );
+
+            if(btn){
+
+                btn.click();
+
+            }
+
+        }
+
+    }
+);
 </script>
 

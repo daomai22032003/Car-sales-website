@@ -10,7 +10,7 @@
 
 .car-specs-section{
     margin-top:25px;
-    background:#fff;
+    
 }
 
 /* ===== TITLE ===== */

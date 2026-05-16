@@ -103,7 +103,7 @@
                 <section class="main-content-section"
                     style="background: white; padding: 120px 0 60px; position: relative; z-index: 900;">
                     <div class="container">
-                         @foreach ($list as $item)
+                         @foreach (array_slice($list, 0, 3) as $item)
                             <div class="row" style="margin-top: 40px;">
                                 <div class="col-md-12">
                                     <div class="section-title"

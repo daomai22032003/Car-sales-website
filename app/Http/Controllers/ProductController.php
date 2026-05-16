@@ -378,8 +378,11 @@ if ($request->has('delete_interior_images')) {
 
     public function inventory()
     {
-        $data = Product::orderBy('stock', 'asc')->paginate(20);
-        return view('admin.product.inventory', compact('data'));
+         $data = Product::orderBy('stock', 'asc')
+                   ->orderBy('id', 'asc')
+                   ->paginate(20);
+
+    return view('admin.product.inventory', compact('data'));
     }
 
     public function updateStock(Request $request)

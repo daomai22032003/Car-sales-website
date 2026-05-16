@@ -251,7 +251,32 @@ class ShopController extends GeneralController
         ])->orderBy('id', 'desc')
             ->take(10)
             ->get();
+if(request('compare')){
 
+    $car1 = request('car1')
+        ? Product::with('carSpecs','category')
+            ->find(request('car1'))
+        : null;
+
+}else{
+
+    $car1 = $product;
+}
+
+$car2 = request('car2')
+    ? Product::with('carSpecs','category')
+        ->find(request('car2'))
+    : null;
+
+$car3 = request('car3')
+    ? Product::with('carSpecs','category')
+        ->find(request('car3'))
+    : null;
+
+$car4 = request('car4')
+    ? Product::with('carSpecs','category')
+        ->find(request('car4'))
+    : null;
         return view('shop.product', [
             'category' => $category,
             'product' => $product,
@@ -260,7 +285,10 @@ class ShopController extends GeneralController
             'viewedProducts' => $viewedProducts,
             'exteriorImages' => $exteriorImages,
             'interiorImages' => $interiorImages,
-            'car1' => $product,
+           'car1' => $car1,
+            'car2' => $car2,
+            'car3' => $car3,
+            'car4' => $car4,
     'products' => Product::all(),
     'categories' => Category::all(),
         ]);

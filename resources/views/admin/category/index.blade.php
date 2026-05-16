@@ -1,10 +1,73 @@
 @extends('admin.layouts.main')
 
 @section('content')
+
+<style>
+    .table > tbody > tr > td{
+        vertical-align: middle !important;
+    }
+
+   
+    .status-active{
+        background: #00a65a;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+    .status-hide{
+        background: #999;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+    .action-btn{
+        width: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        border-radius: 8px !important;
+        margin: 0 2px;
+    }
+
+    .action-btn i{
+        font-size: 14px;
+    }
+
+    .table-hover tbody tr:hover{
+        background: #f9fbfd;
+        transition: 0.2s;
+    }
+
+    .box{
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        border: none;
+    }
+
+    .box-header{
+        padding: 15px;
+    }
+
+    .box-footer{
+        background: #fff;
+    }
+</style>
+
 <section class="content-header">
     <h1>
         Danh Sách Danh Mục
-        <a href="{{ route('admin.category.create') }}" class="btn btn-info pull-right">
+
+        <a href="{{ route('admin.category.create') }}"
+           class="btn btn-success pull-right">
             <i class="fa fa-plus"></i> Thêm Danh Mục
         </a>
     </h1>
@@ -18,78 +81,135 @@
 
                 <!-- Header -->
                 <div class="box-header">
-                    <div class="box-tools">
-                        <div class="input-group input-group-sm hidden-xs" style="width: 200px;">
-                            <input type="text" class="form-control pull-right" placeholder="Tìm kiếm...">
+
+                    <div class="box-tools pull-right">
+                        <div class="input-group input-group-sm hidden-xs" style="width: 230px;">
+
+                            <input type="text"
+                                   class="form-control pull-right"
+                                   placeholder="Tìm kiếm danh mục...">
+
                             <div class="input-group-btn">
-                                <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                                <button class="btn btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
+
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Body -->
                 <div class="box-body table-responsive no-padding">
+
                     <table class="table table-hover">
 
-                        <tr>
-                            <th>Tên danh mục</th>
-                            <th>Hình ảnh</th>
-                            <th>Vị trí</th>
-                            <th>Trạng thái</th>
-                            <th class="text-center">Hành động</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Tên danh mục</th>
+                                <th>Hình ảnh</th>
+                                <th>Vị trí</th>
+                                <th>Trạng thái</th>
+                                <th class="text-center" width="170">
+                                    Hành động
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
 
                         @foreach($data as $item)
+
                             <tr class="item-{{ $item->id }}">
 
+                                <!-- Tên -->
                                 <td>
                                     <strong>{{ $item->name }}</strong>
                                 </td>
 
+                                <!-- Ảnh -->
                                 <td>
                                     @if ($item->image)
-                                        <img src="{{ asset($item->image) }}" width="50" height="50" style="border-radius:6px;">
+
+                                       <img src="{{ asset($item->image) }}"
+                                        width="50"
+                                        height="50"
+                                        style="border-radius:6px;">
+
                                     @else
-                                        <span style="color:#999;">Không có</span>
+
+                                        <span style="color:#999;">
+                                            Không có
+                                        </span>
+
                                     @endif
                                 </td>
 
-                                <td>{{ $item->position }}</td>
-
+                                <!-- Vị trí -->
                                 <td>
-                                    @if($item->is_active)
-                                        <span class="label label-success">Hiển thị</span>
-                                    @else
-                                        <span class="label label-default">Ẩn</span>
-                                    @endif
+                                    <span class="label label-primary">
+                                        {{ $item->position }}
+                                    </span>
                                 </td>
 
+                                <!-- Trạng thái -->
+                                <td>
+
+                                    @if($item->is_active)
+
+                                        <span class="status-active">
+                                            Hiển thị
+                                        </span>
+
+                                    @else
+
+                                        <span class="status-hide">
+                                            Ẩn
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <!-- Hành động -->
                                 <td class="text-center">
-                                    <a href="{{ route('admin.category.show', $item->id) }}"
-                                       class="btn btn-default btn-sm">
-                                        Xem
-                                    </a>
 
+                                    <!-- Xem -->
+                                    
+
+                                    <!-- Sửa -->
                                     <a href="{{ route('admin.category.edit', $item->id) }}"
-                                       class="btn btn-info btn-sm">
-                                        Sửa
+                                       class="btn btn-info action-btn"
+                                       title="Sửa">
+
+                                        <i class="fa fa-pencil"></i>
+
                                     </a>
 
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="destroyCategory({{ $item->id }})">
-                                        Xóa
+                                    <!-- Xóa -->
+                                    <button class="btn btn-danger action-btn"
+                                            onclick="destroyCategory({{ $item->id }})"
+                                            title="Xóa">
+
+                                        <i class="fa fa-trash"></i>
+
                                     </button>
+
                                 </td>
 
                             </tr>
+
                         @endforeach
 
+                        </tbody>
+
                     </table>
+
                 </div>
 
                 <!-- Footer -->
-                <div class="box-footer clearfix">
+                <div class="box-footer clearfix text-center">
                     {{ $data->links() }}
                 </div>
 
@@ -98,4 +218,5 @@
         </div>
     </div>
 </section>
+
 @endsection

@@ -75,7 +75,7 @@
                             <!-- Lặp một mảng dữ liệu pass sang view để hiển thị -->
                             @foreach($data as $key => $item)
                                 <tr class="item-{{ $item->id }}"> <!-- Thêm Class Cho Dòng -->
-                                    <td class="text-center">{{ $key }}</td>
+                                    <td class="text-center">{{ $key + 1}}</td>
                                     <td class="text-center">{{ $item->created_at }}</td>
                                     <td class="text-center">{{ $item->code }}</td>
                                     <td>

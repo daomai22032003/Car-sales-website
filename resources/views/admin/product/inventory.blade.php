@@ -25,7 +25,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>STT</th>
                                     <th>Hình ảnh</th>
                                     <th>Tên Sản Phẩm</th>
                                     <th>SKU</th>
@@ -37,7 +37,7 @@
                             <tbody>
                                 @foreach($data as $item)
                                     <tr id="row-{{ $item->id }}">
-                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
                                             @if ($item->image)
                                                 <img src="{{ asset($item->image) }}" width="50" height="50"
@@ -58,7 +58,7 @@
                                         </td>
                                         <td>
                                             <div class="input-group input-group-sm">
-                                                <input type="number" class="form-control" id="input-stock-{{ $item->id }}"
+                                                <input type="number"  min="0" class="form-control" id="input-stock-{{ $item->id }}"
                                                     value="{{ $item->stock }}">
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-info btn-flat"

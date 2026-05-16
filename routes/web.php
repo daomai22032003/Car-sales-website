@@ -102,6 +102,10 @@ Route::post(
     'product/{id}/specs',
     [App\Http\Controllers\ProductController::class, 'updateSpecs']
 )->name('product.specs.update');
+Route::get(
+    'admin/product-color/create/{product_id?}',
+    [App\Http\Controllers\ProductColorController::class, 'create']
+)->name('admin.product-color.create');
     // Quản lý kho
     Route::get('product/inventory', [App\Http\Controllers\ProductController::class, 'inventory'])->name('product.inventory');
     Route::post('product/update-stock', [App\Http\Controllers\ProductController::class, 'updateStock'])->name('product.updateStock');

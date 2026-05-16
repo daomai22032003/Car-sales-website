@@ -656,7 +656,8 @@ $showSpecs = [
 
     @if($product->carSpecs->count())
 
-        @foreach($product->carSpecs as $spec)
+       @foreach($product->carSpecs->take(6) as $spec)
+
 
             <div class="spec-item">
 
