@@ -259,7 +259,10 @@ class ShopController extends GeneralController
             'tags' => $tags,
             'viewedProducts' => $viewedProducts,
             'exteriorImages' => $exteriorImages,
-            'interiorImages' => $interiorImages
+            'interiorImages' => $interiorImages,
+            'car1' => $product,
+    'products' => Product::all(),
+    'categories' => Category::all(),
         ]);
     }
 
@@ -404,18 +407,28 @@ public function search(Request $request)
         return redirect('/');
     }
     public function deposit($id)
-    {
-        $product = Product::with('colors.images')
-                    ->findOrFail($id);
+{
+    $product = Product::with([
+        'colors.images',
+        'specs'
+    ])->findOrFail($id);
 
-        $vendors = Vendor::where('is_active',1)->get();
+    $vendors = Vendor::where(
+        'is_active',
+        1
+    )->get();
 
-        return view(
-            'shop.deposit',
-            compact(
-                'product',
-                'vendors'
-            )
-        );
-    }
+    $specs = $product->specs
+        ->pluck('value', 'key')
+        ->toArray();
+
+    return view(
+        'shop.deposit',
+        compact(
+            'product',
+            'vendors',
+            'specs'
+        )
+    );
+}
 }

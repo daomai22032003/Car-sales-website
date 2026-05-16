@@ -46,11 +46,7 @@
     transition:all .3s ease;
 }
 
-.car-specs{
-    display:flex;
-    justify-content:center;
-    gap:30px;
-}
+
 
 .spec-item h3{
     font-size:20px;
@@ -388,6 +384,50 @@ textarea.deposit-input{
     color:#1565c0;
     font-weight:600;
 }
+
+/* thông số dưới ảnh */
+.car-specs{
+   display:flex;
+    justify-content:center;
+    gap:30px;
+
+    padding:0 20px;
+    margin-top:-35px;
+    margin-bottom:20px;
+
+    position:relative;
+    z-index:2;
+}
+
+.spec-item{
+   
+    flex:none; /* QUAN TRỌNG */
+
+    background:#fff;
+    padding:18px;
+    border-radius:14px;
+
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+    min-width:180px; /* đẹp hơn */
+}
+
+.spec-item p{
+    margin:0;
+    font-size:14px;
+    color:#777;
+}
+
+.spec-item h3{
+    margin:0;
+    font-size:20px;
+    font-weight:700;
+
+    word-break:break-word;
+    line-height:1.4;
+}
 </style>
 <div class="breadcrumb-custom"> <a href="{{ route('trangchu') }}"> 
         <i class="fa fa-home"></i> Trang chủ </a>
@@ -416,20 +456,67 @@ textarea.deposit-input{
 
 class="main-car-image">
 
-    <div class="car-specs">
-        <div class="spec-item">
-            <h3>150 kW</h3>
-            <p>Công suất</p>
-        </div>
-        <div class="spec-item">
-            <h3>450 km</h3>
-            <p>Quãng đường</p>
-        </div>
-        <div class="spec-item">
-            <h3>2.840 mm</h3>
-            <p>Chiều dài</p>
-        </div>
+  @php
+
+$specs = [];
+
+foreach($product->carSpecs as $item){
+
+    $specs[$item->spec_name] = $item->spec_value;
+
+}
+
+@endphp
+
+<div class="car-specs">
+
+    <div class="spec-item">
+
+        <p>Nhiên liệu</p>
+
+        <h3>
+
+            {{ isset($specs['Nhiên liệu'])
+                ? $specs['Nhiên liệu']
+                : 'Đang cập nhật'
+            }}
+
+        </h3>
+
     </div>
+
+    <div class="spec-item">
+
+        <p>Số chỗ</p>
+
+        <h3>
+
+            {{ isset($specs['Số chỗ ngồi'])
+                ? $specs['Số chỗ ngồi'].' '
+                : 'Đang cập nhật'
+            }}
+
+        </h3>
+
+    </div>
+
+    <div class="spec-item">
+
+        <p>Mức tiêu hao nhiên liệu</p>
+
+        <h3>
+
+            {{ isset($specs['Mức tiêu hao nhiên liệu'])
+                ? $specs['Mức tiêu hao nhiên liệu']
+                : 'Đang cập nhật'
+            }}
+
+        </h3>
+
+    </div>
+
+</div>
+
     <div class="cancel-order">
     <a href="{{ route('deposit.destroy') }}">
         <i class="fa fa-angle-left"></i>

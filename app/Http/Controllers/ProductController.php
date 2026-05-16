@@ -9,6 +9,7 @@ use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductImage;
+use App\Models\CarSpec;
 class ProductController extends Controller
 {
     /**
@@ -121,6 +122,32 @@ class ProductController extends Controller
         $product->meta_description = $request->input('meta_description');
         $product->user_id = Auth::id(); // lưu id người tạo
         $product->save();
+        // SAVE thông số mới
+if ($request->group_name) {
+
+    foreach ($request->group_name as $key => $group) {
+
+        // bỏ qua dòng trống
+        if (
+            empty($request->spec_name[$key]) &&
+            empty($request->spec_value[$key])
+        ) {
+            continue;
+        }
+
+        CarSpec::create([
+
+            'product_id' => $product->id,
+
+            'group_name' => $group,
+
+            'spec_name' => $request->spec_name[$key],
+
+            'spec_value' => $request->spec_value[$key],
+
+        ]);
+    }
+}
        // 3. Ảnh ngoại thất
         if ($request->hasFile('exterior_images')) {
             foreach ($request->file('exterior_images') as $file) {
@@ -258,6 +285,45 @@ class ProductController extends Controller
         $product->meta_description = $request->input('meta_description');
         $product->user_id = Auth::id();
         $product->save();
+        // XÓA ẢNH NGOẠI THẤT
+if ($request->has('delete_exterior_images')) {
+
+    foreach ($request->delete_exterior_images as $imageId) {
+
+        $image = ProductImage::find($imageId);
+
+        if ($image) {
+
+            // xóa file
+            if (file_exists(public_path($image->image))) {
+                unlink(public_path($image->image));
+            }
+
+            // xóa db
+            $image->delete();
+        }
+    }
+}
+
+// XÓA ẢNH NỘI THẤT
+if ($request->has('delete_interior_images')) {
+
+    foreach ($request->delete_interior_images as $imageId) {
+
+        $image = ProductImage::find($imageId);
+
+        if ($image) {
+
+            // xóa file
+            if (file_exists(public_path($image->image))) {
+                unlink(public_path($image->image));
+            }
+
+            // xóa db
+            $image->delete();
+        }
+    }
+}
         // 3. Ảnh ngoại thất
         if ($request->hasFile('exterior_images')) {
             foreach ($request->file('exterior_images') as $file) {
@@ -326,15 +392,51 @@ class ProductController extends Controller
         }
         return response()->json(['status' => false]);
     }
-    public function installment($slug){
-
-    $product = Product::where('slug', $slug)->firstOrFail();
-
+   public function installmentList()
+{
     $categoriesWithProducts = Category::with('products')->get();
 
-return view('shop.installment', [
-    'product' => $product,
-    'categoriesWithProducts' => $categoriesWithProducts
-]);
+    return view('shop.installment', [
+        'categoriesWithProducts' => $categoriesWithProducts,
+        'product' => null
+    ]);
+}
+public function specs($id)
+{
+    $product = Product::findOrFail($id);
+
+    return view('admin.product.specs', compact('product'));
+}
+public function updateSpecs(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
+
+    // xóa thông số cũ
+    CarSpec::where('product_id', $product->id)->delete();
+
+    // lưu thông số mới
+    if ($request->group_name) {
+
+        foreach ($request->group_name as $key => $group) {
+
+            if (
+                empty($request->spec_name[$key]) &&
+                empty($request->spec_value[$key])
+            ) {
+                continue;
+            }
+
+            CarSpec::create([
+                'product_id' => $product->id,
+                'group_name' => $group,
+                'spec_name' => $request->spec_name[$key],
+                'spec_value' => $request->spec_value[$key],
+            ]);
+        }
+    }
+
+    return redirect()
+        ->route('admin.product.specs', $product->id)
+        ->with('success', 'Lưu thông số thành công');
 }
 }

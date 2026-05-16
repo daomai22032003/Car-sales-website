@@ -34,7 +34,11 @@ Route::get(
     [App\Http\Controllers\DepositController::class, 'destroy']
 )->name('deposit.destroy');
 // dự tính trả góp
+Route::get('/tra-gop', [App\Http\Controllers\ProductController::class, 'installmentList'])
+    ->name('shop.installment');
 Route::get('/tra-gop/{slug}', [App\Http\Controllers\ProductController::class, 'installment']);
+Route::get('/so-sanh', [App\Http\Controllers\CompareController::class, 'index'])
+    ->name('compare');
 // Danh mục
 Route::get('/danh-muc/{slug}', [App\Http\Controllers\ShopController::class, 'getProductsByCategory'])->name('shop.category');
 
@@ -90,6 +94,14 @@ Route::post('/admin/postLogin', [App\Http\Controllers\AdminController::class, 'p
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'checkLogin'], function () {
     Route::get('/', [App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
     Route::resource('category', App\Http\Controllers\CategoryController::class);
+   Route::get(
+    'product/{id}/specs',
+    [App\Http\Controllers\ProductController::class, 'specs']
+)->name('product.specs');
+Route::post(
+    'product/{id}/specs',
+    [App\Http\Controllers\ProductController::class, 'updateSpecs']
+)->name('product.specs.update');
     // Quản lý kho
     Route::get('product/inventory', [App\Http\Controllers\ProductController::class, 'inventory'])->name('product.inventory');
     Route::post('product/update-stock', [App\Http\Controllers\ProductController::class, 'updateStock'])->name('product.updateStock');

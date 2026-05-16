@@ -99,13 +99,7 @@
         </li>
 
         <li>
-            <a href="tel:0378034401" class="call-link">
-
-                <i class="fa fa-phone"></i>
-
-                Gọi tư vấn
-
-            </a>
+            
         </li>
 
         <li>
@@ -114,7 +108,7 @@
             </a>
         </li>
         <li>
-           <a href="{{ url('/tra-gop/'.$product->slug) }}" >
+           <a href="{{ route('shop.installment') }}" >
                Dự tính trả góp
            </a>
         </li>
@@ -143,7 +137,7 @@
                             style="position: absolute; top: -8px; right: -8px; background: #e53935; color: white; border-radius: 50%; font-size: 11px; font-weight: 700; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; line-height: 1;">{{ $totalQty }}</span>
                     @endif
                 </a>
-                <a href="#" class="btn-quote hidden-xs">Báo giá Xe</a>
+                
             </div>
         </div>
     </div>

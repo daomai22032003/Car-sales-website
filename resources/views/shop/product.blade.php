@@ -10,16 +10,17 @@
     gap:30px;
     margin-top:20px;
     margin-bottom:40px;
+    align-items:flex-start;
 }
 
 .product-left{
-    flex:1;
+    flex:1.3;
 }
 
 .product-right{
     flex:1;
     background:#fff;
-    padding:20px;
+    padding:16px;
     border-radius:12px;
     box-shadow:0 5px 20px rgba(0,0,0,0.08);
 }
@@ -34,16 +35,16 @@
 /* ===== TITLE ===== */
 
 .product-title{
-    font-size:28px;
+    font-size:22px;
     font-weight:700;
-    margin-bottom:10px;
+    margin-bottom:6px;
 }
 
 /* ===== STATUS ===== */
 
 .product-status{
-    margin-bottom:15px;
-    font-size:15px;
+    margin-bottom:10px;
+    font-size:14px;
 }
 
 .in-stock{
@@ -58,7 +59,7 @@
 /* ===== PRICE ===== */
 
 .price-sale{
-    font-size:34px;
+    font-size:25px;
     font-weight:bold;
     color:#e60023;
 }
@@ -145,33 +146,78 @@
     color:#2f80ed;
 }
 
-/* ===== TAB ===== */
 
+
+/* ===== TABS ===== */
 .product-tabs{
     width:100%;
-    clear:both;
+    margin-top:18px;
+    margin-bottom:30px;
 }
 
+/* thanh đen full */
 .tab-buttons{
+    width:100%;
+    background:#111;
+
     display:flex;
-    gap:25px;
-    border-bottom:1px solid #eee;
-    margin-bottom:25px;
+    align-items:center;
+
+    padding:0;
+}
+.tab-btn{
+    min-width:140px;
+    height:60px;
+
+    display:flex;
+    flex-direction:row;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:.25s;
+
+    border-right:1px solid rgba(255,255,255,0.08);
 }
 
-.tab-btn{
-    padding:12px 0;
-    cursor:pointer;
-    font-weight:600;
+.tab-btn i{
+    font-size:18px;
+}
+
+.tab-btn:last-child{
+    border-right:none;
+}
+
+.tab-btn:hover{
+    background:#1a1a1a;
 }
 
 .tab-btn.active{
-    color:#2f80ed;
-    border-bottom:3px solid #2f80ed;
+    background:#000;
+}
+/* BỎ VIỀN CUỐI */
+
+.tab-btn:last-child{
+    border-right:none;
 }
 
-.tab-content{
-    width:100%;
+/* ACTIVE */
+
+.tab-btn.active{
+    background:#000;
+}
+
+/* HOVER */
+
+.tab-btn:hover{
+    background:#1c1c1c;
 }
 
 /* ===== REVIEW ===== */
@@ -364,8 +410,8 @@
 }
 
 .car-slider__viewport img{
-    width:100%;
-    height:360px;
+    width:120%;
+    height:400px;
     object-fit:cover;
     display:block;
 }
@@ -454,6 +500,7 @@
     background:#2f80ed;
     transform:scale(1.2);
 }
+
 </style>
 
 <div class="container">
@@ -489,29 +536,49 @@
        <div class="product-left">
 
     <div class="car-slider">
-
+      
         <div class="car-slider__viewport">
-            <button class="car-slider__nav car-slider__nav--prev" onclick="carSlider_change(-1)">❮</button>
 
-            <img id="carSliderMain" src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+            <button class="car-slider__nav car-slider__nav--prev"
+                    onclick="carSlider_change(-1)">
+                ❮
+            </button>
+
+            <img id="carSliderMain"
+                 src="{{ asset($product->image) }}"
+                 alt="{{ $product->name }}">
+
             <div class="car-slider__dots" id="carSliderDots"></div>
-            <button class="car-slider__nav car-slider__nav--next" onclick="carSlider_change(1)">❯</button>
+
+            <button class="car-slider__nav car-slider__nav--next"
+                    onclick="carSlider_change(1)">
+                ❯
+            </button>
+
         </div>
 
         <div class="car-slider__tabs">
-            <button class="car-slider__tab is-active" onclick="carSlider_switch('exterior', this)">
-                <i class="fas fa-car"></i> Ngoại thất
+
+            <button class="car-slider__tab is-active"
+                    onclick="carSlider_switch('exterior', this)">
+                <i class="fas fa-car"></i>
+                Ngoại thất
             </button>
 
-            <button class="car-slider__tab" onclick="carSlider_switch('interior', this)">
-                <i class="fas fa-cube"></i> Nội thất
+            <button class="car-slider__tab"
+                    onclick="carSlider_switch('interior', this)">
+                <i class="fas fa-cube"></i>
+                Nội thất
             </button>
+
         </div>
 
     </div>
 
+    <!-- TAB ĐEN -->
+            
+      <!-- end tab -->
 </div>
-
         <!-- RIGHT -->
 
         <div class="product-right">
@@ -557,113 +624,129 @@
 
 </a>
 
-            @php
+          @php
 
-            $specMap = [
-                'fuel' => 'Nhiên liệu',
-                'engine' => 'Động cơ',
-                'gearbox' => 'Hộp số',
-                'seats' => 'Số chỗ',
-                'airbags' => 'Túi khí',
-                'consumption' => 'Tiêu thụ'
-            ];
+function getSpecIcon($name){
 
-            function getSpecIcon($key) {
-                return [
-                    'fuel' => 'fa-gas-pump',
-                    'engine' => 'fa-cogs',
-                    'gearbox' => 'fa-gears',
-                    'seats' => 'fa-chair',
-                    'airbags' => 'fa-shield-halved',
-                    'consumption' => 'fa-gauge-high'
-                ][$key] ?? 'fa-car';
-            }
+    return [
 
-            @endphp
-            {{--
-           //nhập thông số xe
-            foreach ([
-                'fuel' => 'Điện',
-                'consumption' => '>300KM/lần sạc',
-                'engine' => 'Động cơ điện',
-                'gearbox' => 'Số tự động',
-                'seats' => '4 chỗ',
-                'airbags' => '4 túi khí',
-            ] as $key => $value) {
+        'Nhiên liệu' => 'fa-gas-pump',
+        'Kiểu động cơ' => 'fa-cogs',
+        'Hộp số' => 'fa-gears',
+        'Số chỗ ngồi' => 'fa-chair',
+        'Túi khí' => 'fa-shield-halved',
+        'Mức tiêu hao nhiên liệu' => 'fa-gauge-high',
 
-                \App\Models\ProductSpec::updateOrCreate(
-                    [
-                        'product_id' => 8,
-                        'key' => $key
-                    ],
-                    [
-                        'value' => $value
-                    ]
-                );
-            }
-            --}}
-            
-            <div class="specs">
-            
-                @foreach($specMap as $key => $label)
+    ][$name] ?? 'fa-car';
 
-                    @php
-                        $spec = $product->specs->firstWhere('key', $key);
-                    @endphp
+}
 
-                    <div class="spec-item">
+$showSpecs = [
+    'Nhiên liệu',
+    'Kiểu động cơ',
+    'Hộp số',
+    'Số chỗ ngồi',
+    'Túi khí',
+    'Mức tiêu hao nhiên liệu'
+];
 
-                        <div class="spec-icon">
-                            <i class="fa-solid {{ getSpecIcon($key) }}"></i>
-                        </div>
+@endphp
 
-                        <div>
+<div class="specs">
 
-                            <div class="spec-value">
-                                {{ $spec->value ?? '--' }}
-                            </div>
+    @if($product->carSpecs->count())
 
-                            <div class="spec-label">
-                                {{ $label }}
-                            </div>
+        @foreach($product->carSpecs as $spec)
 
-                        </div>
+            <div class="spec-item">
 
+                <div class="spec-icon">
+
+                    <i class="fa-solid {{ getSpecIcon($spec->spec_name) }}"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="spec-value">
+                        {{ $spec->spec_value }}
                     </div>
 
-                @endforeach
+                    <div class="spec-label">
+                        {{ $spec->spec_name }}
+                    </div>
+
+                </div>
 
             </div>
+
+        @endforeach
+
+    @else
+
+        <div class="spec-item">
+
+            <div class="spec-icon">
+                <i class="fa-solid fa-car"></i>
+            </div>
+
+            <div>
+
+                <div class="spec-value">
+                    --
+                </div>
+
+                <div class="spec-label">
+                    Chưa cập nhật thông số
+                </div>
+
+            </div>
+
+        </div>
+
+    @endif
+
+</div>
 
         </div>
 
     </div>
 
     <!-- TABS -->
+<div class="product-tabs">
 
-    <div class="product-tabs">
+    <div class="tab-buttons">
 
-        <div class="tab-buttons">
-
-            <div class="tab-btn active"
-                 onclick="openTab(event,'summary')">
-                Tóm tắt
-            </div>
-
-            <div class="tab-btn"
-                 onclick="openTab(event,'detail')">
-                Chi tiết
-            </div>
-
-            <div class="tab-btn"
-                 onclick="openTab(event,'review')">
-                Đánh giá
-            </div>
-            <div class="tab-btn"
-                 onclick="openTab(event,'review')">
-                So sánh
-            </div>
+        <div class="tab-btn active"
+            onclick="openTab(event,'summary')">
+            <i class="bi bi-card-text"></i>
+            <span>Tóm Tắt</span>
         </div>
+
+        <div class="tab-btn"
+            onclick="openTab(event,'detail')">
+            <i class="bi bi-file-earmark-text"></i>
+            <span>Chi Tiết</span>
+        </div>
+
+        <div class="tab-btn"
+            onclick="openTab(event,'review')">
+            <i class="bi bi-star"></i>
+            <span>Đánh Giá</span>
+        </div>
+
+        <div class="tab-btn"
+            onclick="openTab(event,'compare')">
+
+            <i class="bi bi-arrow-left-right"></i>
+            <span>So Sánh</span>
+
+        </div>
+
+    </div>
+
+</div>
+    
 
         <!-- SUMMARY -->
 
@@ -676,9 +759,15 @@
         <div class="tab-content"
              id="detail"
              style="display:none;">
+           
+           @php
+    $cleanDescription = preg_replace('/<p>(&nbsp;|\s|<br\s*\/?>)*<\/p>/i', '', $product->description);
+@endphp
 
-            {!! $product->description !!}
-
+<div class="product-description">
+    {!! $cleanDescription !!}
+</div>
+            @include('shop.specs')
         </div>
 
         <!-- REVIEW -->
@@ -798,7 +887,15 @@
         </div>
 
     </div>
+<!-- COMPARE -->
 
+<div class="tab-content"
+     id="compare"
+     style="display:none;">
+
+    @include('shop.compare')
+
+</div>
     <!-- RELATED -->
 
       {{--<div class="related-products">
@@ -851,7 +948,7 @@
 
 function openTab(event, tab){
 
-    let tabs = ['summary', 'detail', 'review'];
+    let tabs = ['summary', 'detail', 'review', 'compare'];
 
     tabs.forEach(function(item){
         document.getElementById(item).style.display = 'none';

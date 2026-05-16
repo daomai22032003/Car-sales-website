@@ -53,5 +53,8 @@ class Product extends Model
         return $this->hasMany(ProductColor::class);
         
     }
-    
+    public function carSpecs()
+    {
+        return $this->hasMany(CarSpec::class);
+    }
 }

@@ -102,6 +102,15 @@
                                             class="btn btn-flat btn-info">
                                             <i class="fa fa-edit"></i>
                                         </a>
+                                        <!-- SPECS -->
+
+                                        <a href="{{ route('admin.product.specs', $item->id) }}"
+                                            class="btn btn-flat btn-warning"
+                                            title="Thông số kỹ thuật">
+
+                                            <i class="fa fa-cogs"></i>
+
+                                        </a>
                                         <!-- Thêm sự kiện onlick cho nút xóa -->
                                         <a href="javascript:void(0)" class="btn btn-flat btn-danger"
                                             onclick="destroyProduct({{ $item->id }})">

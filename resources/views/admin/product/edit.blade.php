@@ -260,6 +260,8 @@ $(function () {
     var editor2 = CKEDITOR.replace('editor2');
     editor2.config.height = 200;
 });
+
+
 </script>
 
 @endsection
