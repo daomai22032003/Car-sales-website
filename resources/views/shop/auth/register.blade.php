@@ -11,7 +11,7 @@
                         <div class="auth-header" style="text-align: center; margin-bottom: 40px;">
                             <h2 style="font-weight: 800; color: #1a2a5a; font-size: 28px; margin-bottom: 10px;">Đăng ký tài
                                 khoản</h2>
-                            <p style="color: #666;">Trở thành thành viên của cộng đồng DailyXe</p>
+                            <p style="color: #666;">Trở thành thành viên của cộng đồng Shopdaomai</p>
                         </div>
 
                         <form method="POST" action="{{ route('register') }}">

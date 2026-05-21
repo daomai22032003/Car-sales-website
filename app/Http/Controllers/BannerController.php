@@ -8,12 +8,18 @@ use Illuminate\Support\Str;
 
 class BannerController extends Controller
 {
-    public function index()
-    {
-        $data = Banner::latest()->paginate(10);
+   public function index(Request $request)
+{
+    $query = Banner::query()->latest();
 
-        return view('admin.banner.index', compact('data'));
+    if ($request->filled('table_search')) {
+        $query->where('title', 'like', '%' . $request->table_search . '%');
     }
+
+    $data = $query->paginate(10);
+
+    return view('admin.banner.index', compact('data'));
+}
 
     public function create()
     {

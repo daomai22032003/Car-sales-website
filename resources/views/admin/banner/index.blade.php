@@ -72,19 +72,32 @@
                         <div class="input-group input-group-sm hidden-xs"
                              style="width: 180px;">
 
-                            <input type="text"
-                                   name="table_search"
-                                   class="form-control pull-right"
-                                   placeholder="Search">
+                           <form method="GET" action="{{ url()->current() }}" class="input-group input-group-sm" style="width: 250px;">
+
+    <input type="text"
+           name="table_search"
+           value="{{ request('table_search') }}"
+           class="form-control pull-right"
+           placeholder="Search banner...">
+
+    <div class="input-group-btn">
+        <button type="submit" class="btn btn-default">
+            <i class="fa fa-search"></i>
+        </button>
+
+        @if(request('table_search'))
+            <a href="{{ url()->current() }}"
+               class="btn btn-default"
+               style="margin-left:2px;">
+                Reset
+            </a>
+        @endif
+    </div>
+
+</form>
 
                             <div class="input-group-btn">
 
-                                <button type="submit"
-                                        class="btn btn-default">
-
-                                    <i class="fa fa-search"></i>
-
-                                </button>
 
                             </div>
 

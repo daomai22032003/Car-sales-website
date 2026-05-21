@@ -9,12 +9,22 @@ use Illuminate\Support\Str;
 class VendorController extends Controller
 {
     // ================== LIST ==================
-    public function index()
-    {
-        $data = Vendor::orderBy('id', 'desc')->get();
+    public function index(Request $request)
+{
+    $query = Vendor::query()->orderBy('id', 'desc');
 
-        return view('admin.vendor.index', compact('data'));
+    if ($request->filled('table_search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->table_search . '%')
+              ->orWhere('phone', 'like', '%' . $request->table_search . '%')
+              ->orWhere('email', 'like', '%' . $request->table_search . '%');
+        });
     }
+
+    $data = $query->paginate(10);
+
+    return view('admin.vendor.index', compact('data'));
+}
 
     // ================== CREATE ==================
     public function create()

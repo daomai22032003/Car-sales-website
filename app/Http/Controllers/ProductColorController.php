@@ -10,9 +10,24 @@ use App\Models\ProductColorImage;
 
 class ProductColorController extends Controller
 {
-   public function index()
+  public function index(Request $request)
 {
-    $items = Product::with('colors')->get();
+    $query = Product::with('colors')->orderBy('id', 'desc');
+
+    // 🔎 lọc theo tên xe
+    if ($request->filled('keyword')) {
+        $query->where('name', 'like', '%' . $request->keyword . '%');
+    }
+
+    // 🎨 lọc theo màu
+    if ($request->filled('color')) {
+        $query->whereHas('colors', function ($q) use ($request) {
+            $q->where('color_name', 'like', '%' . $request->color . '%')
+              ->orWhere('color_code', 'like', '%' . $request->color . '%');
+        });
+    }
+
+    $items = $query->get();
 
     return view('admin.product_color.index', compact('items'));
 }

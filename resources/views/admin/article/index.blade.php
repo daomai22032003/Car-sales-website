@@ -78,19 +78,11 @@
                         <div class="input-group input-group-sm hidden-xs"
                              style="width: 180px;">
 
-                            <input type="text"
-                                   name="table_search"
-                                   class="form-control pull-right"
-                                   placeholder="Search">
+                            
 
                             <div class="input-group-btn">
 
-                                <button type="submit"
-                                        class="btn btn-default">
-
-                                    <i class="fa fa-search"></i>
-
-                                </button>
+                               
 
                             </div>
 
@@ -208,7 +200,7 @@
                                        class="btn btn-info action-btn"
                                        title="Sửa">
 
-                                        <i class="fa fa-edit"></i>
+                                        <i class="fa fa-pencil"></i>
 
                                     </a>
 

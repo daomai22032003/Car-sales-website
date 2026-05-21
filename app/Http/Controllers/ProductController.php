@@ -376,14 +376,48 @@ if ($request->has('delete_interior_images')) {
         ], 200);
     }
 
-    public function inventory()
-    {
-         $data = Product::orderBy('stock', 'asc')
-                   ->orderBy('id', 'asc')
-                   ->paginate(20);
+   public function inventory(Request $request)
+{
+    $query = Product::query();
+
+    // 🔎 search tên / sku
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('sku', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    // 📦 lọc kho
+    if ($request->filled('stock')) {
+
+        if ($request->stock == 'out') {
+            $query->where('stock', 0);
+        }
+
+        if ($request->stock == 'low') {
+            $query->where('stock', '>', 0)
+                  ->where('stock', '<', 5);
+        }
+
+        if ($request->stock == 'ok') {
+            $query->where('stock', '>=', 5);
+        }
+    }
+
+    // 🔃 sort (giữ logic của bạn nhưng có thể đổi)
+    if ($request->filled('sort') && $request->sort == 'desc') {
+        $query->orderBy('stock', 'desc');
+    } else {
+        $query->orderBy('stock', 'asc');
+    }
+
+    $data = $query->orderBy('id', 'asc')
+                   ->paginate(20)
+                   ->appends($request->all());
 
     return view('admin.product.inventory', compact('data'));
-    }
+}
 
     public function updateStock(Request $request)
     {

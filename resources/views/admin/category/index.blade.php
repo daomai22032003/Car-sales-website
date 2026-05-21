@@ -60,6 +60,18 @@
     .box-footer{
         background: #fff;
     }
+    .box-tools form input{
+    transition: 0.2s;
+}
+
+.box-tools form input:focus{
+    border-color: #3c8dbc;
+    box-shadow: 0 0 5px rgba(60,141,188,0.3);
+}
+
+.box-tools form button{
+    min-width: 42px;
+}
 </style>
 
 <section class="content-header">
@@ -83,19 +95,31 @@
                 <div class="box-header">
 
                     <div class="box-tools pull-right">
-                        <div class="input-group input-group-sm hidden-xs" style="width: 230px;">
+                        <form method="GET"
+                            action="{{ url()->current() }}"
+                            style="display:flex; gap:8px; align-items:center;">
 
                             <input type="text"
-                                   class="form-control pull-right"
-                                   placeholder="Tìm kiếm danh mục...">
+                                name="keyword"
+                                value="{{ request('keyword') }}"
+                                class="form-control input-sm"
+                                style="width: 220px; border-radius: 6px;"
+                                placeholder="Tìm danh mục...">
 
-                            <div class="input-group-btn">
-                                <button class="btn btn-default">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
+                            <button class="btn btn-primary btn-sm"
+                                    style="border-radius: 6px;">
+                                <i class="fa fa-search"></i>
+                            </button>
 
-                        </div>
+                            @if(request('keyword'))
+                                <a href="{{ url()->current() }}"
+                                class="btn btn-default btn-sm"
+                                style="border-radius: 6px;">
+                                    Reset
+                                </a>
+                            @endif
+
+                        </form>
                     </div>
 
                 </div>

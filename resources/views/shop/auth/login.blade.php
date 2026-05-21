@@ -11,7 +11,7 @@
                         <div class="auth-header" style="text-align: center; margin-bottom: 40px;">
                             <h2 style="font-weight: 800; color: #1a2a5a; font-size: 28px; margin-bottom: 10px;">Đăng nhập
                             </h2>
-                            <p style="color: #666;">Mừng bạn quay trở lại với DailyXe</p>
+                            <p style="color: #666;">Mừng bạn quay trở lại với shopdaomai</p>
                         </div>
                             @if(session('success'))
                                 <div style="background: #e6f4ea; color: #2e7d32; padding: 12px; border-radius: 10px; margin-bottom: 20px;">

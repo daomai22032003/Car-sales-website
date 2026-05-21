@@ -101,6 +101,7 @@ public function destroy(Request $request)
 }
     public function vnpayDone(Request $request)
 {
+    
     $data = session('deposit_data');
 
     if(!$data){

@@ -8,11 +8,61 @@
 <div class="container showroom-wrapper">
 
     <!-- BREADCRUMB -->
-    <div class="mb-4" style="font-size:14px; color:#777;">
-        <a href="/" style="color:#777;">Trang chủ</a> >
-        <span>Showroom</span> >
-        <strong>{{ $vendor->name }}</strong>
-    </div>
+<div class="breadcrumb-box mb-3">
+    <a href="/">
+        <i class="fa fa-home"></i> Trang chủ
+    </a>
+
+    <span class="divider">›</span>
+
+    <a href="">
+        Showroom
+    </a>
+
+    <span class="divider">›</span>
+
+    <strong class="active">
+    {{ $vendor->name }}
+</strong>
+</div>
+
+<style>
+    .breadcrumb-box .active{
+    color:#222;
+    font-weight:700;
+}
+.breadcrumb-box{
+    background:#f5f5f5;
+    padding:10px 18px;
+    border-radius:4px;
+    font-size:14px;
+    color:#666;
+}
+
+.breadcrumb-box a{
+    color:#666;
+    text-decoration:none;
+}
+
+.breadcrumb-box a:hover{
+    color:#d70018;
+}
+
+.breadcrumb-box .divider{
+    margin:0 8px;
+    color:#999;
+}
+
+.breadcrumb-box .active{
+    color:#333;
+    font-weight:500;
+}
+
+.breadcrumb-box i{
+    margin-right:4px;
+}
+</style>
+   
 
     <!-- SHOWROOM -->
     <div class="row" style="margin-top:20px;">

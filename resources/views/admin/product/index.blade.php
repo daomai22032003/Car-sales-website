@@ -274,7 +274,7 @@
                                        class="btn btn-info action-btn"
                                        title="Sửa">
 
-                                        <i class="fa fa-edit"></i>
+                                        <i class="fa fa-pencil"></i>
 
                                     </a>
 

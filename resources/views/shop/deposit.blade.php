@@ -684,10 +684,7 @@ foreach($product->carSpecs as $item){
             <span>Cá nhân</span>
         </label>
 
-        <label class="owner-option">
-            <input type="radio" name="owner_type" value="doanhnghiep">
-            <span>Doanh nghiệp</span>
-        </label>
+       
 
     </div>
 </div>
@@ -960,8 +957,9 @@ let vendors = @json($vendors);
     // ===== UPDATE GIÁ =====
     function updatePrice(extraPrice = 0){
 
-        let total = basePrice + parseInt(extraPrice);
-
+        let total =
+    parseInt(basePrice) +
+    parseInt(extraPrice);
         $("#car-price").html(
             total.toLocaleString('vi-VN') + ' VNĐ'
         );
@@ -973,7 +971,7 @@ let vendors = @json($vendors);
         $("#final-price").html(
             total.toLocaleString('vi-VN') + ' VNĐ'
         );
-         let deposit = total * 0.1;
+         let deposit = Math.round(total * 0.1);
 
     $("#deposit-amount").text(
         deposit.toLocaleString('vi-VN') + ' VNĐ'
@@ -1171,9 +1169,11 @@ let vendors = @json($vendors);
 let colorId = $(this).data("id");
 
 $("#product_color_id").val(colorId);
-        let extraPrice = parseInt(
-            $(this).data("price")
-        ) || 0;
+       let extraPrice = parseInt(
+    $(this).data("price")
+        .toString()
+        .replace(/\D/g, '')
+) || 0;
 
         // đổi ảnh
        if(image){

@@ -18,9 +18,30 @@
                 <div class="box-header">
                     <div class="box-tools">
                         <div class="input-group input-group-sm hidden-xs" style="width: 200px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                           <form method="GET" action="{{ url()->current() }}" class="input-group input-group-sm" style="width: 250px;">
+
+    <input type="text"
+           name="table_search"
+           value="{{ request('table_search') }}"
+           class="form-control pull-right"
+           placeholder="Tên / SĐT / Email">
+
+    <div class="input-group-btn">
+        <button type="submit" class="btn btn-default">
+            <i class="fa fa-search"></i>
+        </button>
+
+        @if(request('table_search'))
+            <a href="{{ url()->current() }}"
+               class="btn btn-default">
+                Reset
+            </a>
+        @endif
+    </div>
+
+</form>
                             <div class="input-group-btn">
-                                <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                               
                             </div>
                         </div>
                     </div>

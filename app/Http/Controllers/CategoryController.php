@@ -11,12 +11,18 @@ class CategoryController extends Controller
     /**
      * Danh sách
      */
-    public function index()
-    {
-        $data = Category::orderBy('position', 'asc')->paginate(10);
+    public function index(Request $request)
+{
+    $query = Category::orderBy('position', 'asc');
 
-        return view('admin.category.index', compact('data'));
+    if ($request->filled('keyword')) {
+        $query->where('name', 'like', '%' . $request->keyword . '%');
     }
+
+    $data = $query->paginate(10);
+
+    return view('admin.category.index', compact('data'));
+}
 
     /**
      * Form thêm
