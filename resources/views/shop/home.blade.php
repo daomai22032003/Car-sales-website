@@ -73,19 +73,37 @@
                                                 </div>
                                                 <div class="trending-tags"
                                                     style="color: white; font-size: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+
                                                     <span style="opacity: 0.8;">Được tìm nhiều:</span>
-                                                    <span class="tag-item"
-                                                        style="background: rgba(0,0,0,0.4); padding: 4px 15px; border-radius: 20px; cursor: pointer; transition: background 0.2s;">Giá
-                                                        xe tháng 4</span>
-                                                    <span class="tag-item"
-                                                        style="background: rgba(0,0,0,0.4); padding: 4px 15px; border-radius: 20px; cursor: pointer; transition: background 0.2s;">VinFast
-                                                        VF5</span>
-                                                    <span class="tag-item"
-                                                        style="background: rgba(0,0,0,0.4); padding: 4px 15px; border-radius: 20px; cursor: pointer; transition: background 0.2s;">Toyota
-                                                        Vios</span>
-                                                    <span class="tag-item"
-                                                        style="background: rgba(0,0,0,0.4); padding: 4px 15px; border-radius: 20px; cursor: pointer; transition: background 0.2s;">KIA
-                                                        Sportage</span>
+
+                                                    <a href="{{ url('/chi-tiet-san-pham/vinfast-vf5-plus-may-dien_9') }}"
+                                                    class="tag-item"
+                                                    style="background: rgba(0,0,0,0.4);
+                                                            padding: 4px 15px;
+                                                            border-radius: 20px;
+                                                            cursor: pointer;
+                                                            transition: background 0.2s;
+                                                            color: white;
+                                                            text-decoration: none;">
+
+                                                        VinFast VF5
+
+                                                    </a>
+
+                                                    <a href="#"
+                                                    class="tag-item"
+                                                    style="background: rgba(0,0,0,0.4);
+                                                            padding: 4px 15px;
+                                                            border-radius: 20px;
+                                                            cursor: pointer;
+                                                            transition: background 0.2s;
+                                                            color: white;
+                                                            text-decoration: none;">
+
+                                                        Toyota Vios
+
+                                                    </a>
+
                                                 </div>
                                             </form>
                                         </div>

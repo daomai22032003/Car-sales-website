@@ -124,7 +124,7 @@ class ShopController extends GeneralController
     }
 
     // ===== 3. Khởi tạo QUERY (QUAN TRỌNG) =====
-    $query = Product::with('specs')
+    $query = Product::with('carSpecs')
         ->whereIn('category_id', $ids)
         ->where('is_active', 1);
 
@@ -134,27 +134,55 @@ class ShopController extends GeneralController
     $filter_price   = $request->price;
     $filter_keyword = $request->keyword;
     $filter_brand   = $request->brand;
+    $productId = $request->product_id;
+
+if ($productId) {
+
+    $query->where('id', $productId);
+
+}
     // ===== 5. FILTER specs =====
     // ===== FILTER LOẠI XE (brand) =====
     if ($filter_brand) {
         $query->where('brand_id', $filter_brand);
     }
-    // Số chỗ
-    if ($filter_seats) {
-        $query->whereHas('specs', function ($q) use ($filter_seats) {
-            $q->where('key', 'seats')
-              ->where('value', $filter_seats);
-        });
-    }
+  // ===== FILTER SỐ CHỖ =====
+if ($filter_seats) {
 
-    // Hộp số
-    if ($filter_gearbox) {
-        $query->whereHas('specs', function ($q) use ($filter_gearbox) {
-            $q->where('key', 'gearbox')
-              ->where('value', $filter_gearbox);
-        });
-    }
+    $query->whereHas('carSpecs', function ($q) use ($filter_seats) {
 
+        $q->where('spec_name', 'Số chỗ ngồi')
+          ->where('spec_value', $filter_seats);
+
+    });
+
+}
+
+// ===== FILTER HỘP SỐ =====
+if ($filter_gearbox) {
+
+    $query->whereHas('carSpecs', function ($q) use ($filter_gearbox) {
+
+        $q->where('spec_name', 'Hộp số');
+
+        if ($filter_gearbox === 'Tự động') {
+
+            $q->where(function ($sub) {
+                $sub->where('spec_value', 'LIKE', '%tự động%')
+                    ->orWhere('spec_value', 'LIKE', '%at%')
+                    ->orWhere('spec_value', 'LIKE', '%AT%')
+                    ->orWhere('spec_value', 'LIKE', '%CVT%');
+            });
+
+        } else {
+
+            $q->where('spec_value', 'LIKE', '%sàn%')
+              ->orWhere('spec_value', 'LIKE', '%MT%');
+
+        }
+
+    });
+}
     // ===== 6. FILTER giá =====
     if ($filter_price) {
         $range = explode('-', $filter_price);
@@ -456,6 +484,31 @@ public function search(Request $request)
             'product',
             'vendors',
             'specs'
+        )
+    );
+}
+public function carSearch(Request $request)
+{
+    $keyword = $request->q;
+
+    $products = Product::where(
+            'name',
+            'LIKE',
+            '%' . $keyword . '%'
+        )
+        ->paginate(12);
+
+    $totalResult = $products->total();
+
+    $category = null;
+
+    return view(
+        'shop.search',
+        compact(
+            'products',
+            'keyword',
+            'totalResult',
+            'category'
         )
     );
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductImage;
 use App\Models\CarSpec;
+
 class ProductController extends Controller
 {
     /**
@@ -415,7 +416,7 @@ if ($request->has('delete_interior_images')) {
     $data = $query->orderBy('id', 'asc')
                    ->paginate(20)
                    ->appends($request->all());
-
+ 
     return view('admin.product.inventory', compact('data'));
 }
 

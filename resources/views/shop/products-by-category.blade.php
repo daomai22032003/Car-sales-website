@@ -75,10 +75,13 @@
         <!-- ===== MODEL TAG ===== -->
         @if($products->count() > 0)
         <div class="model-tags">
-            @foreach($products as $product)
-                <span class="tag">{{ $product->name }}</span>
-            @endforeach
-        </div>
+    @foreach($products->take(3) as $product)
+        <a href="{{ request()->fullUrlWithQuery(['product_id' => $product->id]) }}"
+           class="tag">
+            {{ $product->name }}
+        </a>
+    @endforeach
+</div>
         @endif
 
         <!-- ===== PRODUCT LIST ===== -->

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\Product;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -52,21 +55,35 @@ class OrderController extends Controller
 
         return view('admin.order.edit', compact('order', 'order_status'));
     }
+    
+public function update(Request $request, $id)
+{
+    $order = Order::with('details')->findOrFail($id);
 
-    public function update(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
+    $oldStatus = (int)$order->order_status_id;
+    $newStatus = (int)$request->order_status_id;
 
-        $order->address = $request->address;
-        $order->note = $request->note;
-        $order->order_status_id = $request->order_status_id;
-        $order->payment_vnpay_status = $request->payment_vnpay_status;
+    $order->address = $request->address;
+    $order->note = $request->note;
+    $order->order_status_id = $newStatus;
+    $order->payment_vnpay_status = $request->payment_vnpay_status;
 
-        $order->save();
+    $order->save();
 
-        return redirect()->back()->with('msg', 'Cập nhật đơn hàng thành công');
+    // Trừ kho khi hoàn thành
+    if ($oldStatus != 3 && $newStatus == 3) {
+
+        foreach ($order->details as $item) {
+
+            DB::table('products')
+                ->where('id', $item->product_id)
+                ->decrement('stock', $item->qty);
+        }
     }
 
+    return redirect()->back()
+        ->with('msg', 'Cập nhật đơn hàng thành công');
+}
     public function destroy($id)
     {
         Order::destroy($id);

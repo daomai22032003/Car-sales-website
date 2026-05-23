@@ -9,10 +9,117 @@ use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductColorImage;
 use Illuminate\Support\Facades\Auth;
+
 class DepositController extends Controller
 {
     public function vnpay(Request $request)
     {
+        if($request->payment_method == 'cash'){
+
+    $product = Product::find(
+        $request->product_id
+    );
+
+    if(!$product){
+        return redirect('/');
+    }
+
+    // TẠO ĐƠN
+    $order = new Order();
+
+    $order->user_id = Auth::id();
+
+    $order->fullname =
+        $request->customer_name;
+
+    $order->phone =
+        $request->customer_phone;
+
+    $order->email =
+        $request->customer_email;
+
+    $order->note =
+        'Khách gửi đơn trực tiếp';
+
+    $order->total = str_replace(
+        ['VNĐ','.',' ',','],
+        '',
+        $request->car_price
+    );
+
+    // KHÔNG THANH TOÁN ONLINE
+    $order->payment_vnpay = 0;
+
+    $order->payment_vnpay_status = 0;
+
+    $order->order_status_id = 1;
+
+    $order->code =
+        'DC-' . date('dmY') . '-' . time();
+
+    $order->product_color_id =
+        $request->product_color_id;
+
+    $order->customer_cccd =
+        $request->customer_cccd;
+
+    $order->showroom =
+        $request->showroom;
+
+    $order->manager_name =
+        $request->manager_name;
+
+    $order->exterior_color =
+        $request->exterior_color;
+
+    $order->interior_color =
+        $request->interior_color;
+
+    $order->save();
+
+    // DETAIL
+    $detail = new OrderDetail();
+
+    $detail->order_id = $order->id;
+
+    $detail->product_id = $product->id;
+
+    $detail->name = $product->name;
+
+    $productColorImage =
+        ProductColorImage::where(
+            'product_color_id',
+            $request->product_color_id
+        )->first();
+
+    $detail->image =
+        $productColorImage->image
+        ?? $product->image;
+
+    $detail->sku = $product->sku;
+
+    $detail->qty = 1;
+
+    $detail->price = str_replace(
+        ['VNĐ','.',' ',','],
+        '',
+        $request->car_price
+    );
+
+    $detail->save();
+
+    // TRỪ KHO
+    $product->stock -= 1;
+
+    $product->save();
+
+    return redirect()->route(
+        'shop.cart.deposit_success',
+        [
+            'order_code' => $order->code
+        ]
+    );
+}
         session([
             'deposit_data' => $request->all()
         ]);
@@ -197,9 +304,8 @@ $order->interior_color =
 
     $detail->save();
     // Trừ kho
-    $product->stock -= 1;
-
-    $product->save();
+   $order->payment_vnpay_status = 1; // đã cọc
+$order->order_status_id = 1; // chờ xử lý
 
     session()->forget('deposit_data');
 

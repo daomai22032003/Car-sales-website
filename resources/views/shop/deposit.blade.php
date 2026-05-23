@@ -428,6 +428,41 @@ textarea.deposit-input{
     word-break:break-word;
     line-height:1.4;
 }
+.cash-order-box{
+    margin-top:18px;
+    text-align:center;
+}
+
+.cash-order-box p{
+    font-size:13px;
+    color:#777;
+    margin-bottom:10px;
+}
+
+.cash-order-box button{
+    width:100%;
+    height:46px;
+
+    border-radius:10px;
+
+    border:1px solid #1565c0;
+
+    background:#fff;
+
+    color:#1565c0;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.cash-order-box button:hover{
+    background:#1565c0;
+    color:#fff;
+}
 </style>
 <div class="breadcrumb-custom"> <a href="{{ route('trangchu') }}"> 
         <i class="fa fa-home"></i> Trang chủ </a>
@@ -812,6 +847,10 @@ foreach($product->carSpecs as $item){
       method="POST">
 
     @csrf
+    <input type="hidden"
+       name="payment_method"
+       id="payment_method"
+       value="vnpay">
     <input type="hidden"name="product_color_id"id="product_color_id">
     <input type="hidden" name="product_id"
            value="{{ $product->id }}">
@@ -930,7 +969,20 @@ foreach($product->carSpecs as $item){
     <b id="deposit-amount"></b>
 </p>
     </div>
+{{--<div class="cash-order-box">
 
+    <p>
+        Hoặc gửi đơn hàng trực tiếp về showroom
+    </p>
+
+    <button type="button"
+            id="cash-order-btn">
+
+        GỬI ĐƠN HÀNG
+
+    </button>
+
+</div>--}}
     <button type="submit"
     class="deposit-btn payment-btn">
 
@@ -1409,6 +1461,15 @@ localStorage.setItem(
     "last_deposit_url",
     window.location.href
 );
+$("#cash-order-btn").click(function(){
+
+    // đổi hình thức
+    $("#payment_method").val("cash");
+
+    // submit form
+    $("#vnpay-form").submit();
+
+});
 </script>
 
 @endsection

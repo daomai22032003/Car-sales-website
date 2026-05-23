@@ -79,7 +79,11 @@ Route::get('/vnpay_done', [App\Http\Controllers\CartController::class, 'vnpayDon
 Route::get('/dat-coc-thanh-cong', [App\Http\Controllers\CartController::class, 'depositSuccess'])->name('shop.cart.deposit_success');
 
 
-
+// search tìm xe gần giỏ hàng
+Route::get(
+    '/car-search-result',
+    [App\Http\Controllers\ShopController::class, 'carSearch']
+)->name('car.search.result');
 // Liên Hệ
 Route::resource('contact', App\Http\Controllers\ContactController::class);
 

@@ -153,16 +153,16 @@
                                         {{ $item->stock }}
                                     </span>
                                      {{-- 🔥 THÔNG BÁO --}}
-    @if($item->stock == 0)
-        <small class="text-danger" style="display:block;margin-top:5px;">
-            <i class="fa fa-times-circle"></i> Hết hàng
-        </small>
+                                    @if($item->stock == 0)
+                                        <small class="text-danger" style="display:block;margin-top:5px;">
+                                            <i class="fa fa-times-circle"></i> Hết hàng
+                                        </small>
 
-    @elseif($item->stock < 5)
-        <small class="text-warning" style="display:block;margin-top:5px;">
-            <i class="fa fa-warning"></i> Sắp hết hàng
-        </small>
-    @endif
+                                    @elseif($item->stock < 5)
+                                        <small class="text-warning" style="display:block;margin-top:5px;">
+                                            <i class="fa fa-warning"></i> Sắp hết hàng
+                                        </small>
+                                    @endif
                                 </td>
 
                                 <td>
