@@ -202,7 +202,9 @@
         </td>
 
         <td>
-            {{ $order->phone }}
+            <a href="tel:{{ $order->phone }}" target="_blank">
+                {{ $order->phone }}
+            </a>
         </td>
 
         <td>
@@ -212,31 +214,31 @@
         <td>
 
             <select class="form-control"
-                    name="payment_vnpay_status"
-                    style="max-width:200px;">
+                name="payment_vnpay_status"
+                style="max-width:200px;">
 
-                <option value="0"
-                    {{ ($order->payment_vnpay_status == 0 ? 'selected' : '') }}>
+            <option value="0"
+                {{ ($order->payment_vnpay_status == 0 ? 'selected' : '') }}>
 
-                    Chưa cọc
+                Chờ xác nhận cọc
 
-                </option>
+            </option>
 
-                <option value="1"
-                    {{ ($order->payment_vnpay_status == 1 ? 'selected' : '') }}>
+            <option value="1"
+                {{ ($order->payment_vnpay_status == 1 ? 'selected' : '') }}>
 
-                    Chờ xác nhận
+                Đã xác nhận cọc
 
-                </option>
+            </option>
 
-                <option value="2"
-                    {{ ($order->payment_vnpay_status == 2 ? 'selected' : '') }}>
+            <option value="2"
+                {{ ($order->payment_vnpay_status == 2 ? 'selected' : '') }}>
 
-                    Đã cọc
+                Từ chối cọc
 
-                </option>
+            </option>
 
-            </select>
+        </select>
 
         </td>
 
@@ -249,7 +251,9 @@
         </td>
 
         <td>
-            {{ $order->email }}
+            <a href="mailto:{{ $order->email }}" target="_blank">
+                {{ $order->email }}
+            </a>
         </td>
 
         <td>

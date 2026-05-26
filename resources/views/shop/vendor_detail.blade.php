@@ -134,9 +134,33 @@
                 ✉ {{ $vendor->email }}
             </div>
             @endif
+            <div style="margin-bottom:10px;">
+                @if($vendor->description)
+                    <div style="
+                        margin-top:20px;
+                        padding-top:15px;
+                        border-top:1px solid #eee;
+                    ">
+                        <h5 style="
+                            font-weight:700;
+                            margin-bottom:10px;
+                            font-size:18px;
+                        ">
+                            Giới thiệu showroom
+                        </h5>
 
+                        <p style="
+                            color:#555;
+                            line-height:1.8;
+                            margin-bottom:0;
+                        ">
+                            {{ $vendor->description }}
+                        </p>
+                    </div>
+                    @endif
+                 </div>
         </div>
-
+              
     </div>
 
 </div>

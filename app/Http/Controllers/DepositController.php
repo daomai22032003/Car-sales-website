@@ -9,7 +9,8 @@ use App\Models\Product;
 use App\Models\ProductColor;
 use App\Models\ProductColorImage;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DepositSuccessMail;
 class DepositController extends Controller
 {
     public function vnpay(Request $request)
@@ -112,7 +113,9 @@ class DepositController extends Controller
     $product->stock -= 1;
 
     $product->save();
-
+// GỬI MAIL
+//Mail::to($order->email)
+   // ->send(new DepositSuccessMail($order));
     return redirect()->route(
         'shop.cart.deposit_success',
         [
@@ -252,7 +255,7 @@ public function destroy(Request $request)
             $data['deposit_price']
         );
 
-    $order->payment_vnpay_status = 1;
+    $order->payment_vnpay_status = 0;
 
     $order->order_status_id = 1;
 
@@ -302,9 +305,27 @@ $order->interior_color =
     $data['car_price']
 );
 
+    
     $detail->save();
+
+// GỬI MAIL XÁC NHẬN
+//Mail::to($order->email)
+   // ->send(new DepositSuccessMail($order));
+// Trừ kho
+$order->payment_vnpay_status = 0;
+
+$order->order_status_id = 1;
+
+session()->forget('deposit_data');
+
+return redirect()->route(
+    'shop.cart.deposit_success',
+    [
+        'order_code' => $order->code
+    ]
+);
     // Trừ kho
-   $order->payment_vnpay_status = 1; // đã cọc
+   $order->payment_vnpay_status = 0; // đã cọc
 $order->order_status_id = 1; // chờ xử lý
 
     session()->forget('deposit_data');

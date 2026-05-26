@@ -29,9 +29,11 @@
 <section class="content">
 
     {{-- NÚT THÊM MÀU --}}
-    <a href="{{ route('admin.product-color.create') }}"
-       class="btn btn-primary"
-       style="margin-bottom:15px;">
+    <a href="{{ route('admin.product-color.create', [
+        'product_id' => $product->id
+    ]) }}"
+    class="btn btn-primary"
+    style="margin-bottom:15px;">
 
         + Thêm màu
 

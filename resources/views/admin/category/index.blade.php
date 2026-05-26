@@ -156,10 +156,23 @@
                                 <td>
                                     @if ($item->image)
 
-                                       <img src="{{ asset($item->image) }}"
-                                        width="50"
-                                        height="50"
-                                        style="border-radius:6px;">
+                                                                    <div style="
+                                        width:90px;
+                                        height:55px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        background:#fff;
+                                        border-radius:6px;
+                                        overflow:hidden;
+                                    ">
+                                        <img src="{{ asset($item->image) }}"
+                                            style="
+                                                max-width:100%;
+                                                max-height:100%;
+                                                object-fit:contain;
+                                            ">
+                                    </div>
 
                                     @else
 

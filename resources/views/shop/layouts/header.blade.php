@@ -68,19 +68,26 @@
                             <li class="menu-item mega-parent">
                                 <a href="#">TÌM XE <i class="fa fa-angle-down"></i></a>
                                 <div class="mega-menu">
-                                    <div class="mega-title">THƯƠNG HIỆU XE</div>
+                                   <div class="header-dropdown-title">
+    THƯƠNG HIỆU XE
+</div>
 
-                                    <div class="brand-grid">
-                                        @foreach($categories as $cat)
-                                            <a href="{{ route('shop.category', $cat->slug) }}" class="brand-item">
+<div class="header-brand-grid">
 
-                                                <img src="{{ asset($cat->image) }}" alt="">
+    @foreach($categories as $cat)
 
-                                                <span>{{ $cat->name }}</span>
+        <a href="{{ route('shop.category', $cat->slug) }}"
+           class="header-brand-item">
 
-                                            </a>
-                                        @endforeach
-                                    </div>
+            <img src="{{ asset($cat->image) }}" alt="">
+
+            <span>{{ $cat->name }}</span>
+
+        </a>
+
+    @endforeach
+
+</div>
                                 </div>
                                 
                             </li>
@@ -502,6 +509,86 @@
     }
 
 }
+/* ===== HEADER BRAND MENU ===== */
+/* TITLE */
+
+.header-dropdown-title{
+    width:100%;
+
+    font-size:15px;
+    font-weight:700;
+
+    color:#222;
+
+    margin-bottom:16px;
+    padding-bottom:12px;
+
+    border-bottom:1px solid #eee;
+}
+
+/* GRID */
+
+.header-brand-grid{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+/* ITEM */
+
+.header-brand-item{
+    width:92px;
+    height:92px;
+
+    border:1px solid #e5e5e5;
+    border-radius:12px;
+
+    background:#fff;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-decoration:none;
+
+    transition:.25s;
+}
+
+/* HOVER */
+
+.header-brand-item:hover{
+    border-color:#2f80ed;
+    transform:translateY(-2px);
+}
+
+/* LOGO */
+
+.header-brand-item img{
+    width:36px !important;
+    height:36px !important;
+
+    object-fit:contain;
+
+    margin-bottom:7px;
+
+    display:block;
+}
+
+/* TEXT */
+
+.header-brand-item span{
+    font-size:12px;
+    font-weight:600;
+
+    color:#222;
+
+    text-align:center;
+
+    line-height:1.2;
+}
+
 </style>
 <script>
 

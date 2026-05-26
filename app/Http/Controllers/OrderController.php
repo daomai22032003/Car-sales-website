@@ -8,7 +8,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DepositSuccessMail;
 class OrderController extends Controller
 {
     public function index(Request $request)
@@ -60,15 +61,54 @@ public function update(Request $request, $id)
 {
     $order = Order::with('details')->findOrFail($id);
 
-    $oldStatus = (int)$order->order_status_id;
-    $newStatus = (int)$request->order_status_id;
+    // trạng thái cũ
+    $oldPaymentStatus =
+        (int)$order->payment_vnpay_status;
 
-    $order->address = $request->address;
-    $order->note = $request->note;
-    $order->order_status_id = $newStatus;
-    $order->payment_vnpay_status = $request->payment_vnpay_status;
+    $oldStatus =
+        (int)$order->order_status_id;
+
+    $newStatus =
+        (int)$request->order_status_id;
+
+    // update dữ liệu
+    $order->address =
+        $request->address;
+
+    $order->note =
+        $request->note;
+
+    $order->order_status_id =
+        $newStatus;
+
+    $order->payment_vnpay_status =
+        $request->payment_vnpay_status;
 
     $order->save();
+
+    // GỬI MAIL
+    // khi admin xác nhận cọc
+    
+    if(
+        $oldPaymentStatus == 0 &&
+        $request->payment_vnpay_status == 1
+    ){
+
+       try {
+
+    Mail::to($order->email)
+        ->send(
+            new DepositSuccessMail($order)
+        );
+
+   
+
+} catch (\Exception $e) {
+
+    dd($e->getMessage());
+
+}
+    }
 
     // Trừ kho khi hoàn thành
     if ($oldStatus != 3 && $newStatus == 3) {
@@ -82,7 +122,10 @@ public function update(Request $request, $id)
     }
 
     return redirect()->back()
-        ->with('msg', 'Cập nhật đơn hàng thành công');
+        ->with(
+            'msg',
+            'Cập nhật đơn hàng thành công'
+        );
 }
     public function destroy($id)
     {

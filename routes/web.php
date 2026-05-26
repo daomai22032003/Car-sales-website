@@ -1,5 +1,19 @@
 <?php
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+Route::get('/admin/login', [App\Http\Controllers\AdminController::class, 'login'])->name('admin.login');
 
+Route::get('/test-mail', function () {
+
+    Mail::raw('Laravel gửi mail thành công!', function ($message) {
+
+        $message->to('daomai2203@gmail.com')
+                ->subject('Test gửi mail');
+
+    });
+
+    return 'Đã gửi mail!';
+});
 // Trang chủ
 Route::get('/', [App\Http\Controllers\ShopController::class, 'index'])->name('trangchu');
 // SHOWROOM

@@ -31,17 +31,20 @@
                     <label>Sản phẩm</label>
 
                     <select name="product_id"
-                            class="form-control">
+                        class="form-control">
 
-                        @foreach($products as $product)
+                    @foreach($products as $product)
 
-                            <option value="{{ $product->id }}">
-                                {{ $product->name }}
-                            </option>
+                        <option value="{{ $product->id }}"
+                            {{ request('product_id') == $product->id ? 'selected' : '' }}>
 
-                        @endforeach
+                            {{ $product->name }}
 
-                    </select>
+                        </option>
+
+                    @endforeach
+
+                </select>
 
                 </div>
 

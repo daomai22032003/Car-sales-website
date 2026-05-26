@@ -192,16 +192,27 @@ body{
 
 /* BRAND ITEM */
 
+//* BRAND ITEM */
+
 .brand-item{
-     height:52px;
+    height:64px;
+
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    border-radius:10px;
+
+    padding:0 18px;
+
+    border-radius:12px;
+
     cursor:pointer;
-    transition:.2s;
-    margin-bottom:4px;
+
+    transition:.25s;
+
+    margin-bottom:8px;
+
+    border:1px solid #eee;
+
+    background:#fff;
 }
 
 .brand-item:hover{
@@ -217,31 +228,38 @@ body{
 .brand-left{
     display:flex;
     align-items:center;
-    gap:15px;
+
+    gap:16px;
 }
 
 /* LOGO */
 
 .brand-left img{
-    width:34px;
-    height:34px;
+    width:42px;
+    height:42px;
+
     object-fit:contain;
+
+    display:block;
+
     flex-shrink:0;
 }
 
-/* NAME */
+/* TEXT */
 
 .brand-name{
-    font-size:16px;
-    color:#222;
-    font-weight:500;
-}
+    font-size:15px;
+    font-weight:600;
 
+    color:#222;
+
+    line-height:1;
+}
 /* ARROW */
 
 .arrow{
-    font-size:18px;
-    color:#999;
+    font-size:13px;
+    color:#bbb;
 }
 
 /* CAR ITEM */
@@ -537,30 +555,33 @@ body{
                         <div class="dropdown-body">
 
                             <!-- BRAND -->
-                            <div class="brand-col">
+                            <!-- BRAND -->
+                                <div class="brand-col">
 
-                                @foreach($categoriesWithProducts as $cat)
+                                    @foreach($categoriesWithProducts as $cat)
 
-                                    <div class="brand-item"
-                                         onclick="selectBrand({{ $cat->id }}, event)">
+                                        <div class="brand-item"
+                                            onclick="selectBrand({{ $cat->id }}, event)">
 
-                                        <div class="brand-left">
+                                            <div class="brand-left">
 
-                                            <img src="{{ asset($cat->image) }}">
+                                               
 
-                                            <div class="brand-name">
-                                                {{ $cat->name }}
+                                                    <img src="{{ asset($cat->image) }}">
+
+                                               
+
+                                                <div class="brand-name">
+                                                    {{ $cat->name }}
+                                                </div>
+
                                             </div>
 
                                         </div>
 
-                                       
+                                    @endforeach
 
-                                    </div>
-
-                                @endforeach
-
-                            </div>
+                                </div>
 
                             <!-- CAR -->
                             <div class="car-col"

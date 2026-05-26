@@ -388,15 +388,15 @@ textarea.deposit-input{
 /* thông số dưới ảnh */
 .car-specs{
    display:flex;
-    justify-content:center;
-    gap:30px;
+   justify-content:center;
+   gap:30px;
 
-    padding:0 20px;
-    margin-top:-35px;
-    margin-bottom:20px;
+   padding:0 20px;
+   margin-top:10px; /* xuống dưới thêm */
+   margin-bottom:20px;
 
-    position:relative;
-    z-index:2;
+   position:relative;
+   z-index:2;
 }
 
 .spec-item{

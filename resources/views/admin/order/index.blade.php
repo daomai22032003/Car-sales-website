@@ -91,11 +91,23 @@
                                     </td>
                                     <td>
                                         @if ($item->payment_vnpay_status === 0)
-                                            <span class="label label-info">Chưa cọc</span>
+
+                                            <span class="label label-warning">
+                                                Chờ xác nhận cọc
+                                            </span>
+
                                         @elseif ($item->payment_vnpay_status === 1)
-                                            <span class="label label-warning">Chờ xác nhận</span>
+
+                                            <span class="label label-success">
+                                                Đã xác nhận cọc
+                                            </span>
+
                                         @else
-                                            <span class="label label-success">Đã cọc</span>
+
+                                            <span class="label label-danger">
+                                                Từ chối cọc
+                                            </span>
+
                                         @endif
                                     </td>
                                     <td>
