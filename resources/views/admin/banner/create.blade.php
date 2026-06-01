@@ -30,7 +30,7 @@
                                 <label for="exampleInputFile">Ảnh</label>
                                 <input type="file" id="image" name="image">
                             </div>
-                            <div class="form-group">
+                             <!--<div class="form-group">
                                 <label for="exampleInputEmail1">Tùy chỉnh liên kết Url</label>
                                 <input type="text" class="form-control" id="url" name="url" placeholder="Url">
                             </div>
@@ -48,21 +48,21 @@
                                     <option value="2">background</option>
                                     <option value="3">banner right</option>
                                 </select>
-                            </div>
+                            </div>-->
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="1" name="is_active"> Trạng thái hiển thị
                                 </label>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="exampleInputEmail1">Vị trí</label>
                                 <input type="number" class="form-control" id="position" name="position" value="0">
                             </div>
-                            <div class="form-group">
+                             <div class="form-group">
                                 <label>Mô tả</label>
                                 <textarea id="editor1" name="description" class="form-control" rows="10" placeholder="Enter ..."></textarea>
                             </div>
-                        </div>
+                        </div>-->
                         <!-- /.box-body -->
 
                         <div class="box-footer">

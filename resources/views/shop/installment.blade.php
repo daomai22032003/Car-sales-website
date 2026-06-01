@@ -192,8 +192,6 @@ body{
 
 /* BRAND ITEM */
 
-//* BRAND ITEM */
-
 .brand-item{
     height:64px;
 
@@ -229,7 +227,7 @@ body{
     display:flex;
     align-items:center;
 
-    gap:16px;
+    gap:24px;
 }
 
 /* LOGO */
@@ -243,6 +241,7 @@ body{
     display:block;
 
     flex-shrink:0;
+     margin-right:10px;
 }
 
 /* TEXT */

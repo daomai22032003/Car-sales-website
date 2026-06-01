@@ -194,9 +194,7 @@
                             <tr class="item-{{ $item->id }}">
 
                                 <!-- STT -->
-                                <td>
-                                    {{ $key + 1 }}
-                                </td>
+                              <td>{{ $data->firstItem() + $loop->index }}</td>
 
                                 <!-- NAME -->
                                 <td>

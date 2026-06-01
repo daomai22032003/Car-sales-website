@@ -48,6 +48,43 @@
     .stock-ok { background: #00a65a; color: #fff; }
     .stock-low { background: #f39c12; color: #fff; }
     .stock-out { background: #dd4b39; color: #fff; }
+    /* PAGINATION */
+
+.pagination{
+    margin:0;
+}
+
+.pagination > li > a,
+.pagination > li > span{
+    width:38px;
+    height:38px;
+    line-height:38px;
+
+    padding:0;
+    text-align:center;
+
+    border:1px solid #ddd;
+    background:#fff;
+    color:#666;
+
+    font-size:14px;
+    font-weight:600;
+}
+
+.pagination > li > a:hover{
+    background:#f5f5f5;
+}
+
+.pagination > .active > span{
+    background:#1e88e5 !important;
+    border-color:#1e88e5 !important;
+    color:#fff !important;
+}
+
+.pagination > .disabled > span{
+    background:#fafafa;
+    color:#bbb;
+}
 </style>
 
 <section class="content-header">
@@ -199,7 +236,7 @@
                 </div>
 
                 <!-- 📄 PAGINATION -->
-                <div class="box-footer text-center">
+              <div class="box-footer text-left" style="margin-top:20px;">
                     {{ $data->appends(request()->all())->links() }}
                 </div>
 

@@ -27,7 +27,8 @@ class ProductColorController extends Controller
         });
     }
 
-    $items = $query->get();
+    $items = $query->paginate(10)
+               ->appends($request->all());
 
     return view('admin.product_color.index', compact('items'));
 }

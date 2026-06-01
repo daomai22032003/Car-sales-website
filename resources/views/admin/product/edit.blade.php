@@ -101,11 +101,11 @@
 
 {{-- POSITION --}}
 
-<div class="form-group">
+<!--<div class="form-group">
     <label>Vị trí</label>
     <input type="number" class="form-control w-50" name="position"
            value="{{ old('position', $product->position ?? 0) }}">
-</div>
+</div>-->
 
 {{-- PRICE --}}
 
@@ -115,11 +115,11 @@
     <input type="number" class="form-control" name="price"
            value="{{ old('price', $product->price) }}">
 </div>
-<div class="col-lg-6">
+<!-- <div class="col-lg-6">
     <label>Giá KM</label>
     <input type="number" class="form-control" name="sale"
            value="{{ old('sale', $product->sale) }}">
-</div>
+</div>-->
 </div>
 
 {{-- CATEGORY --}}
@@ -197,11 +197,11 @@
 
 {{-- URL --}}
 
-<div class="form-group">
+<!--<div class="form-group">
     <label>Liên kết (URL)</label>
     <input type="text" class="form-control" name="url"
            value="{{ old('url', $product->url) }}">
-</div>
+</div>-->
 
 {{-- SUMMARY --}}
 
@@ -223,7 +223,7 @@
 
 {{-- META --}}
 
-<div class="form-group">
+<!--<div class="form-group">
     <label>Meta Title</label>
     <input type="text" class="form-control" name="meta_title"
            value="{{ old('meta_title', $product->meta_title) }}">
@@ -234,7 +234,7 @@
     <textarea name="meta_description" class="form-control" rows="3">
 {{ old('meta_description', $product->meta_description) }}
     </textarea>
-</div>
+</div>-->
 
 </div>
 

@@ -181,6 +181,7 @@
 
                         <thead>
                             <tr>
+                                <th>TT</th>
                                 <th>Họ & Tên</th>
                                 <th>Email</th>
                                 <th>Hình ảnh</th>
@@ -197,7 +198,9 @@
                         @foreach($data as $key => $item)
 
                             <tr class="item-{{ $item->id }}">
-
+  <td>
+                                        {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                                    </td>
                                 <!-- NAME -->
                                 <td>
                                     <strong>{{ $item->name }}</strong>

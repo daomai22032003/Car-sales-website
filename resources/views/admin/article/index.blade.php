@@ -103,7 +103,7 @@
                                 <th>Tiêu đề tin tức</th>
                                 <th>Hình ảnh</th>
                                 <th>Loại</th>
-                                <th>Vị trí</th>
+                                 <!--<th>Vị trí</th>-->
                                 <th>Trạng thái</th>
                                 <th class="text-center" width="140">
                                     Hành động
@@ -165,13 +165,13 @@
                                 </td>
 
                                 <!-- POSITION -->
-                                <td>
+                                <!-- <td>
 
                                     <span class="label label-info">
                                         {{ $item->position }}
                                     </span>
 
-                                </td>
+                                </td>-->
 
                                 <!-- STATUS -->
                                 <td>

@@ -42,9 +42,9 @@
                                 <div class="col-md-3">
                                     <select name="payment_status" class="form-control">
                                         <option value="">-- Trạng thái Cọc --</option>
-                                        <option value="0" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '0') ? 'selected' : '' }}>Chưa cọc</option>
-                                        <option value="1" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '1') ? 'selected' : '' }}>Chờ xác nhận</option>
-                                        <option value="2" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '2') ? 'selected' : '' }}>Đã cọc</option>
+                                        <option value="0" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '0') ? 'selected' : '' }}>Chờ xác nhận cọc</option>
+                                        <option value="1" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '1') ? 'selected' : '' }}>Đã xác nhận cọc</option>
+                                        <option value="2" {{ (isset($filter['payment_status']) && $filter['payment_status'] === '2') ? 'selected' : '' }}>Từ chối cọc</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -79,36 +79,38 @@
                                     <td class="text-center">{{ $item->created_at }}</td>
                                     <td class="text-center">{{ $item->code }}</td>
                                     <td>
-                                        @if ($item->order_status_id === 1)
+                                        @if ($item->order_status_id == 1)
                                             <span class="label label-info">Mới</span>
-                                        @elseif ($item->order_status_id === 2)
+                                        @elseif ($item->order_status_id == 2)
                                             <span class="label label-warning">Đang XL</span>
-                                        @elseif ($item->order_status_id === 3)
+                                        @elseif ($item->order_status_id == 3)
                                             <span class="label label-success">Hoàn thành</span>
                                         @else
                                             <span class="label label-danger">Hủy</span>
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($item->payment_vnpay_status === 0)
+
+                                        @if ($item->payment_vnpay_status == 0)
 
                                             <span class="label label-warning">
                                                 Chờ xác nhận cọc
                                             </span>
 
-                                        @elseif ($item->payment_vnpay_status === 1)
+                                        @elseif ($item->payment_vnpay_status == 1)
 
                                             <span class="label label-success">
                                                 Đã xác nhận cọc
                                             </span>
 
-                                        @else
+                                        @elseif ($item->payment_vnpay_status == 2)
 
                                             <span class="label label-danger">
                                                 Từ chối cọc
                                             </span>
 
                                         @endif
+
                                     </td>
                                     <td>
                                         {{ $item->fullname }}

@@ -26,7 +26,7 @@ class LoginController extends GeneralController
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-
+        $credentials['is_active'] = 1;
         if (Auth::attempt($credentials, $request->has('remember'))) {
             $request->session()->regenerate();
 

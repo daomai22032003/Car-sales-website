@@ -1,69 +1,87 @@
 @extends('admin.layouts.main')
+
 @section('content')
-    <section class="content-header">
-        <h1>
-            Thêm loại <a href="{{route('admin.brand.index')}}" class="btn btn-success pull-right"><i class="fa fa-list"></i> Danh Sách</a>
-        </h1>
-    </section>
 
-    <section class="content">
-        <div class="row">
-            <!-- left column -->
-            <div class="col-md-6">
-                <!-- general form elements -->
+<section class="content-header">
 
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Thông tin loại</h3>
-                    </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-                    <form role="form" action="{{route('admin.brand.store')}}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Tên loại</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputFile">Ảnh</label>
-                                <input type="file" id="image" name="image">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Website</label>
-                                <input type="text" class="form-control" id="website" name="website" placeholder="Url">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Vị trí</label>
-                                <input type="number" class="form-control" id="position" name="position" value="0">
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" value="1" name="is_active"> Trạng thái hiển thị
-                                </label>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
+<h1>
+    Thêm loại xe
 
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Tạo</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.box -->
+    <a href="{{ route('admin.brand.index') }}"
+       class="btn btn-success pull-right">
 
+        <i class="fa fa-list"></i> Danh sách
 
+    </a>
+</h1>
+</section>
+
+<section class="content">
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="box box-primary">
+
+            <div class="box-header with-border">
+                <h3 class="box-title">Thông tin loại xe</h3>
             </div>
-            <!--/.col (right) -->
+
+            <form action="{{ route('admin.brand.store') }}"
+                  method="POST">
+
+                @csrf
+
+                <div class="box-body">
+
+                    <!-- TÊN -->
+                    <div class="form-group">
+
+                        <label>Tên loại</label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="name"
+                               placeholder="Ví dụ: Xe mới">
+
+                    </div>
+
+                    <!-- TRẠNG THÁI -->
+                    <div class="checkbox">
+
+                        <label>
+
+                            <input type="checkbox"
+                                   name="is_active"
+                                   value="1"
+                                   checked>
+
+                            Hiển thị
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fa fa-save"></i> Tạo
+
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
-        <!-- /.row -->
-    </section>
-@endsection
 
-@section('my_javascript')
-    <script type="text/javascript">
-        $(function () {
+    </div>
 
-        })
-    </script>
+</div>
+</section>
+
 @endsection

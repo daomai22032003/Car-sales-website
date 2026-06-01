@@ -57,11 +57,11 @@
                                     <option {{ ($article->type == 3 ? 'selected' : '') }} value="3">- Tin nổi bật</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <!--  <div class="form-group">
                                 <label for="exampleInputEmail1">Vị trí</label>
                                 <input value="{{ $article->position }}" type="number" class="form-control w-50"
                                     id="position" name="position">
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
@@ -86,7 +86,7 @@
                                 <textarea id="editor1" name="description" class="form-control"
                                     rows="10">{{ $article->description }}</textarea>
                             </div>
-                            <div class="form-group">
+                            <!--  <div class="form-group">
                                 <label for="exampleInputEmail1">Meta Title</label>
                                 <input value="{{ $article->meta_title }}" type="text" class="form-control" id="meta_title"
                                     name="meta_title">
@@ -95,7 +95,7 @@
                                 <label>Meta Description</label>
                                 <textarea name="meta_description" class="form-control"
                                     rows="3">{{ $article->meta_description }}</textarea>
-                            </div>
+                            </div>-->
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">

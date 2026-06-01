@@ -61,12 +61,12 @@
                                     </div>
                                 </div>
                                 <!-- /.col-lg-6 -->
-                                <div class="col-lg-6">
+                                 <!--  <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="exampleInputFile">Giá khuyến mại (vnđ)</label>
                                         <input type="number" class="form-control" id="sale" name="sale" value="0" min="0">
                                     </div>
-                                </div>
+                                </div>-->
                                 <!-- /.col-lg-6 -->
                             </div>
                             <div class="form-group">
@@ -101,10 +101,10 @@
                                 <label for="exampleInputEmail1">Mã hàng (SKU)</label>
                                 <input type="text" class="form-control w-50" id="sku" name="sku" placeholder="">
                             </div>
-                            <div class="form-group">
+                             <!-- <div class="form-group">
                                 <label for="exampleInputEmail1">Vị trí</label>
                                 <input type="number" class="form-control w-50" id="position" name="position" value="0">
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <div class="checkbox">
                                     <label>
@@ -119,10 +119,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <!--  <div class="form-group">
                                 <label for="exampleInputEmail1">Liên kết (url) tùy chỉnh</label>
                                 <input type="text" class="form-control" id="url" name="url" placeholder="">
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <label>Tóm tắt</label>
                                 <textarea id="editor2" name="summary" class="form-control" rows="10" ></textarea>
@@ -132,14 +132,14 @@
                                 <label>Mô tả</label>
                                 <textarea id="editor1" name="description" class="form-control" rows="10" ></textarea>
                             </div>
-                            <div class="form-group">
+                          <!--  <div class="form-group">
                                 <label for="exampleInputEmail1">Meta Title</label>
                                 <input type="text" class="form-control" id="meta_title" name="meta_title" >
                             </div>
                             <div class="form-group">
                                 <label>Meta Description</label>
                                 <textarea name="meta_description" class="form-control" rows="3" ></textarea>
-                            </div>
+                            </div>-->
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">

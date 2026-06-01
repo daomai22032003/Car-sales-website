@@ -105,7 +105,7 @@ class ArticleController extends Controller
         $article->is_active = $request->has('is_active') ? 1 : 0;
         $article->url = $request->url;
         $article->summary = $request->summary;
-        $article->description = $request->description;
+       $article->description = $request->description;
         $article->meta_title = $request->meta_title;
         $article->meta_description = $request->meta_description;
 

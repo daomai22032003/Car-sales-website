@@ -51,7 +51,7 @@
 
                 <thead>
                     <tr>
-                        <th>STT</th>
+                        <th>TT</th>
                         <th>Sản phẩm</th>
                         <th>Số màu</th>
                         <th>Danh sách màu</th>
@@ -65,7 +65,7 @@
 
                     <tr>
 
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $items->firstItem() + $loop->index }}</td>
 
                         <td>
                             <b>{{ $item->name }}</b>
@@ -110,7 +110,9 @@
                 </tbody>
 
             </table>
-
+<div class="text-left" style="margin-top:20px;">
+    {{ $items->links() }}
+</div>
         </div>
 
     </div>

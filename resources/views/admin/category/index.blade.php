@@ -131,6 +131,7 @@
 
                         <thead>
                             <tr>
+                                <th>TT</th>
                                 <th>Tên danh mục</th>
                                 <th>Hình ảnh</th>
                                 <th>Vị trí</th>
@@ -146,7 +147,10 @@
                         @foreach($data as $item)
 
                             <tr class="item-{{ $item->id }}">
-
+                                
+                                     <td>
+                                        {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                                    </td>
                                 <!-- Tên -->
                                 <td>
                                     <strong>{{ $item->name }}</strong>

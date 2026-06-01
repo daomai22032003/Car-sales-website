@@ -7,12 +7,6 @@
         vertical-align: middle !important;
     }
 
-    .brand-image{
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
-
     .action-btn{
         width: 36px !important;
         height: 36px !important;
@@ -45,151 +39,108 @@
 
 <section class="content-header">
 
-    <h1>
-        Danh Sách Loại
+<h1>
+    Danh sách loại xe
 
-        <a href="{{route('admin.brand.create')}}"
-           class="btn btn-success pull-right">
+    <a href="{{ route('admin.brand.create') }}"
+       class="btn btn-success pull-right">
 
-            <i class="fa fa-plus"></i> Thêm Loại
+        <i class="fa fa-plus"></i> Thêm loại
 
-        </a>
-    </h1>
+    </a>
+</h1>
 
 </section>
 
 <section class="content">
 
-    <div class="row">
+<div class="row">
 
-        <div class="col-xs-12">
+    <div class="col-xs-12">
 
-            <div class="box">
+        <div class="box">
 
-                <!-- HEADER -->
-                <div class="box-header">
+            <div class="box-body table-responsive no-padding">
 
-                    <div class="box-tools">
+                <table class="table table-hover">
 
-                        <div class="input-group input-group-sm hidden-xs"
-                             style="width: 180px;">
+                    <thead>
+                        <tr>
+                            <th width="80">TT</th>
+                            <th>Tên loại</th>
+                            <th width="150">Trạng thái</th>
+                            <th class="text-center" width="150">
+                                Hành động
+                            </th>
+                        </tr>
+                    </thead>
 
-                            
+                    <tbody>
 
-                            <div class="input-group-btn">
+                    @foreach($data as $item)
 
-                                
+                        <tr class="item-{{ $item->id }}">
 
-                            </div>
+                            <!-- STT -->
+                            <td>
+                                {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                            </td>
 
-                        </div>
+                            <!-- TÊN -->
+                            <td>
+                                <strong>{{ $item->name }}</strong>
+                            </td>
 
-                    </div>
+                            <!-- TRẠNG THÁI -->
+                            <td>
 
-                </div>
+                                @if($item->is_active)
 
-                <!-- TABLE -->
-                <div class="box-body table-responsive no-padding">
+                                    <span class="label label-success">
+                                        Hiển thị
+                                    </span>
 
-                    <table class="table table-hover">
+                                @else
 
-                        <thead>
-                            <tr>
-                                <th>Tên loại</th>
-                                <th>Hình ảnh</th>
-                                
-                              
-                                <th>Trạng thái</th>
-                                <th class="text-center" width="160">
-                                    Hành động
-                                </th>
-                            </tr>
-                        </thead>
+                                    <span class="label label-default">
+                                        Ẩn
+                                    </span>
 
-                        <tbody>
+                                @endif
 
-                        @foreach($data as $key => $item)
+                            </td>
 
-                            <tr class="item-{{ $item->id }}">
+                            <!-- ACTION -->
+                            <td class="text-center">
 
-                                <!-- NAME -->
-                                <td>
-                                    <strong>{{ $item->name }}</strong>
-                                </td>
+                                <!-- EDIT -->
+                                <a href="{{ route('admin.brand.edit', $item->id) }}"
+                                   class="btn btn-info action-btn"
+                                   title="Sửa">
 
-                                <!-- IMAGE -->
-                                <td>
+                                    <i class="fa fa-pencil"></i>
 
-                                    @if ($item->image)
+                                </a>
 
-                                        <img src="{{asset($item->image)}}"
-                                             class="brand-image">
+                                <!-- DELETE -->
+                                <a href="javascript:void(0)"
+                                   class="btn btn-danger action-btn"
+                                   onclick="destroyBrand({{ $item->id }})"
+                                   title="Xóa">
 
-                                    @endif
+                                    <i class="fa fa-trash"></i>
 
-                                </td>
+                                </a>
 
-                                <!-- WEBSITE -->
-                                
+                            </td>
 
-                                <!-- POSITION -->
-                                
+                        </tr>
 
-                                <!-- STATUS -->
-                                <td>
+                    @endforeach
 
-                                    @if($item->is_active == 1)
+                    </tbody>
 
-                                        <span class="label label-success">
-                                            Hiển thị
-                                        </span>
-
-                                    @else
-
-                                        <span class="label label-default">
-                                            Ẩn
-                                        </span>
-
-                                    @endif
-
-                                </td>
-
-                                <!-- ACTION -->
-                                <td class="text-center">
-
-                                    <!-- VIEW -->
-                                    
-
-                                    <!-- EDIT -->
-                                    <a href="{{route('admin.brand.edit', ['brand' => $item->id])}}"
-                                       class="btn btn-info action-btn"
-                                       title="Sửa">
-
-                                        <i class="fa fa-pencil"></i>
-
-                                    </a>
-
-                                    <!-- DELETE -->
-                                    <a href="javascript:void(0)"
-                                       class="btn btn-danger action-btn"
-                                       onclick="destroyBrand({{ $item->id }})"
-                                       title="Xóa">
-
-                                        <i class="fa fa-trash"></i>
-
-                                    </a>
-
-                                </td>
-
-                            </tr>
-
-                        @endforeach
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </table>
 
             </div>
 
@@ -197,6 +148,7 @@
 
     </div>
 
+</div>
 </section>
 
 @endsection

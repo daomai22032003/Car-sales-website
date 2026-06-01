@@ -36,7 +36,7 @@
                                 <br>
                                 <img src="{{ asset('storage/' . $banner->image) }}" width="250">
                             </div>
-                            <div class="form-group">
+                           <!-- <div class="form-group">
                                 <label for="exampleInputEmail1">Tùy chỉnh liên kết Url</label>
                                 <input value="{{ $banner->url }}" type="text" class="form-control" id="url" name="url"
                                     placeholder="Url">
@@ -55,13 +55,13 @@
                                     <option value="2" {{ ($banner->type == 2) ? 'selected' : '' }}>background</option>
                                     <option value="2" {{ ($banner->type == 3) ? 'selected' : '' }}>banner right</option>
                                 </select>
-                            </div>
+                            </div>-->
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" value="1" name="is_active" {{ ($banner->is_active == 1) ? 'checked' : '' }}> Trạng thái hiển thị
                                 </label>
                             </div>
-                            <div class="form-group">
+                           <!-- <div class="form-group">
                                 <label for="exampleInputEmail1">Vị trí</label>
                                 <input type="number" class="form-control" id="position" name="position"
                                     placeholder="Nhập tên vị trí" value="{{ $banner->position }}">
@@ -71,7 +71,7 @@
                                 <textarea id="editor1" name="description" class="form-control" rows="15"
                                     placeholder="Enter ...">{{ $banner->description }}</textarea>
                             </div>
-                        </div>
+                        </div>-->
                         <!-- /.box-body -->
 
                         <div class="box-footer">

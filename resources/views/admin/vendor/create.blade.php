@@ -41,13 +41,7 @@
                             <label>Số điện thoại</label>
                             <input type="text" class="form-control" name="phone">
                         </div>
-
-                        {{-- Address --}}
-                        <div class="form-group">
-                            <label>Địa chỉ</label>
-                            <input type="text" class="form-control" name="address">
-                        </div>
-                        {{-- Province --}}
+                          {{-- Province --}}
                         <div class="form-group">
                             <label>Tỉnh / Thành phố</label>
 
@@ -56,6 +50,13 @@
                                 name="province"
                                 placeholder="VD: Hà Nội">
                         </div>
+                        {{-- Address --}}
+                        <div class="form-group">
+                            <label>Địa chỉ</label>
+                            <input type="text" class="form-control" name="address">
+                        </div>
+                       
+                      
                         {{-- Open time --}}
                         <div class="form-group">
                             <label>Giờ mở cửa</label>
@@ -95,10 +96,10 @@
                         </div>
 
                         {{-- Position --}}
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label>Vị trí</label>
                             <input type="number" class="form-control" name="position" value="0">
-                        </div>
+                        </div>-->
 
                         {{-- Status --}}
                         <div class="checkbox">

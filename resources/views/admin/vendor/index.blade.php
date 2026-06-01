@@ -52,7 +52,7 @@
 
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>TT</th>
                                 <th>Tên NCC</th>
                                 <th>Email</th>
                                 <th>Điện Thoại</th>
@@ -61,16 +61,18 @@
                                 <th>Quản lý</th>
                                 <th>Ảnh</th>
                                 <th>Website</th>
-                                <th>Vị trí</th>
-                                <th>Trạng thái</th>
-                                <th class="text-center">Hành động</th>
+                                <!--<th>Vị trí</th>-->
+                                <th style="width:100px" class="text-center">Trạng thái</th>
+                                <th style="width:100px" class="text-center">Hành động</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @forelse($data as $item)
                                 <tr class="item-{{ $item->id }}">
-                                    <td>{{ $item->id }}</td>
+                                    <td>
+                                        {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                                    </td>
 
                                     <td><strong>{{ $item->name }}</strong></td>
 
@@ -104,7 +106,7 @@
                                         @endif
                                     </td>
 
-                                    <td>{{ $item->position }}</td>
+                                    <!-- <td>{{ $item->position }}</td> -->
 
                                     <td>
                                         @if ($item->is_active)

@@ -8,10 +8,12 @@
     }
 
     .banner-image{
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-    }
+    width:70px;
+    height:50px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
 
     .action-btn{
         width: 36px !important;
@@ -114,11 +116,12 @@
 
                         <thead>
                             <tr>
+                                <th>TT</th>
                                 <th>Tiêu đề</th>
                                 <th>Hình ảnh</th>
-                                <th>Target</th>
+                               <!-- <th>Target</th>
                                 <th>Loại</th>
-                                <th>Vị trí</th>
+                                <th>Vị trí</th> -->
                                 <th>Trạng thái</th>
                                 <th class="text-center" width="160">
                                     Hành động
@@ -131,7 +134,10 @@
                         @foreach($data as $key => $item)
 
                             <tr class="item-{{ $item->id }}">
-
+                                     
+                                     <td>
+                                        {{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}
+                                    </td>
                                 <!-- Tiêu đề -->
                                 <td>
                                     <strong>{{ $item->title }}</strong>
@@ -150,21 +156,21 @@
                                 </td>
 
                                 <!-- Target -->
-                                <td>
+                                 <!-- <td>
                                     {{ ($item->target == 1) ? '_blank' : '_self' }}
-                                </td>
+                                </td>-->
 
                                 <!-- Loại -->
-                                <td>
+                               <!-- <td>
                                     {{ ($item->type == 1) ? 'slide' : 'background' }}
-                                </td>
+                                </td>-->
 
                                 <!-- Vị trí -->
-                                <td>
+                                <!-- <td>
                                     <span class="label label-primary">
                                         {{ $item->position }}
                                     </span>
-                                </td>
+                                </td>-->
 
                                 <!-- Trạng thái -->
                                 <td>

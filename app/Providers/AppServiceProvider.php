@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Vendor;
 use App\Models\Setting; // ❗ THIẾU DÒNG NÀY
-
+use Illuminate\Pagination\Paginator;
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
@@ -32,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
             'settings' => $settings
         ]);
     });
+     Paginator::useBootstrapThree();
 }
 }

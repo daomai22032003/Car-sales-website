@@ -34,25 +34,17 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Địa chỉ 1</label>
+                                <label for="exampleInputEmail1">Địa chỉ </label>
                                 <input value="{{ $setting->address }}" type="text" class="form-control" id="address"
                                     name="address" placeholder="">
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Địa chỉ 2</label>
-                                <input value="{{ $setting->address2 }}" type="text" class="form-control" id="address2"
-                                    name="address2" placeholder="">
-                            </div>
+                           
                             <div class="form-group">
                                 <label for="exampleInputEmail1">SĐT</label>
                                 <input value="{{ $setting->phone }}" type="text" class="form-control" id="phone"
                                     name="phone" placeholder="">
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Hotline</label>
-                                <input value="{{ $setting->hotline }}" type="text" class="form-control" id="hotline"
-                                    name="hotline" placeholder="">
-                            </div>
+                           
                             <div class="form-group">
                                 <label for="exampleInputEmail1">MST</label>
                                 <input value="{{ $setting->tax }}" type="text" class="form-control" id="tax" name="tax"

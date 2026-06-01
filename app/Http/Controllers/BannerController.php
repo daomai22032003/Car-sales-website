@@ -49,11 +49,11 @@ class BannerController extends Controller
         }
 
         // Các field khác
-        $banner->url = $request->url;
-        $banner->target = $request->target;
-        $banner->type = $request->type;
+       // $banner->url = $request->url;
+        //$banner->target = $request->target;
+        //$banner->type = $request->type;
         $banner->is_active = $request->has('is_active') ? 1 : 0;
-        $banner->position = $request->position;
+        //$banner->position = $request->position;
         $banner->description = $request->description;
 
         $banner->save();
@@ -108,11 +108,11 @@ class BannerController extends Controller
         }
 
         // Các field khác
-        $banner->url = $request->url;
-        $banner->target = $request->target;
-        $banner->type = $request->type;
+        //$banner->url = $request->url;
+       //$banner->target = $request->target;
+        //$banner->type = $request->type;
         $banner->is_active = $request->has('is_active') ? 1 : 0;
-        $banner->position = $request->position;
+        //$banner->position = $request->position;
         $banner->description = $request->description;
 
         $banner->save();

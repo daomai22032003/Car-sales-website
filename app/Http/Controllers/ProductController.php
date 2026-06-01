@@ -34,7 +34,7 @@ class ProductController extends Controller
             $query->where('brand_id', $request->brand_id);
         }
 
-        $data = $query->paginate(20);
+        $data = $query->paginate(10);
         $categories = Category::all();
         $brands = Brand::all();
 
@@ -73,8 +73,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:products,name',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000'
+        ],[
+            'name.unique' => 'Đã tồn tại tên xe này',
         ]);
 
         $product = new Product(); // khởi tạo model
@@ -98,7 +100,7 @@ class ProductController extends Controller
 
         $product->stock = $request->input('stock'); // số lượng
         $product->price = $request->input('price');
-        $product->sale = $request->input('sale');
+        //$product->sale = $request->input('sale');
         $product->category_id = $request->input('category_id');
         $product->brand_id = $request->input('brand_id');
         $product->vendor_id = $request->input('vendor_id');
@@ -182,6 +184,7 @@ if ($request->group_name) {
         }
         // chuyển hướng đến trang
         return redirect()->route('admin.product.index');
+        //return redirect()->route('admin.product.edit', $product->id);
     }
 
     /**
@@ -261,7 +264,7 @@ if ($request->group_name) {
 
         $product->stock = $request->input('stock'); // số lượng
         $product->price = $request->input('price');
-        $product->sale = $request->input('sale');
+       //$product->sale = $request->input('sale');
         $product->category_id = $request->input('category_id');
         $product->brand_id = $request->input('brand_id');
         $product->vendor_id = $request->input('vendor_id');
@@ -357,7 +360,8 @@ if ($request->has('delete_interior_images')) {
             }
         }
         // chuyển hướng đến trang
-        return redirect()->route('admin.product.index');
+        //return redirect()->route('admin.product.index');
+        return redirect()->route('admin.product.edit', $product->id);
     }
 
     /**
@@ -414,7 +418,7 @@ if ($request->has('delete_interior_images')) {
     }
 
     $data = $query->orderBy('id', 'asc')
-                   ->paginate(20)
+                   ->paginate(10)
                    ->appends($request->all());
  
     return view('admin.product.inventory', compact('data'));

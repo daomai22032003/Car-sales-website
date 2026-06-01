@@ -112,12 +112,12 @@
                         </div>
 
                         {{-- Position --}}
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label>Vị trí</label>
                             <input type="number" class="form-control"
                                    name="position"
                                    value="{{ $vendor->position }}">
-                        </div>
+                        </div>-->
 
                         {{-- Status --}}
                         <div class="checkbox">

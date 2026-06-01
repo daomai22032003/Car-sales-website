@@ -56,7 +56,7 @@ class VendorController extends Controller
         $vendor->description = $request->description;
         $vendor->map_url = $request->map_url;
 
-        $vendor->position = $request->position ?? 0;
+        //$vendor->position = $request->position ?? 0;
         $vendor->is_active = $request->has('is_active') ? 1 : 0;
 
         // upload ảnh
@@ -117,7 +117,7 @@ class VendorController extends Controller
         $vendor->description = $request->description;
         $vendor->map_url = $request->map_url;
 
-        $vendor->position = $request->position ?? 0;
+        //$vendor->position = $request->position ?? 0;
         $vendor->is_active = $request->has('is_active') ? 1 : 0;
 
         // upload ảnh mới
